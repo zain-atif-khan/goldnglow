@@ -84,18 +84,13 @@ export const PostModal: React.FC<PostModalProps> = ({ post, onClose, settings })
 
           <div style={{ position: 'absolute', bottom: '24px', left: '28px', right: '28px', color: '#FFFFFF' }}>
             <span
+              className="type-editorial-tag"
               style={{
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '9px',
-                fontWeight: 700,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                backgroundColor: '#C0846A',
-                color: '#FFFFFF',
-                padding: '4px 10px',
-                borderRadius: '999px',
-                display: 'inline-block',
+                color: '#FFFFFF !important',
+                fontSize: '10px',
+                letterSpacing: '0.22em',
                 marginBottom: '8px',
+                display: 'inline-block',
               }}
             >
               {post.category}
@@ -116,32 +111,27 @@ export const PostModal: React.FC<PostModalProps> = ({ post, onClose, settings })
                 display: 'flex',
                 alignItems: 'center',
                 gap: '16px',
+                marginTop: '10px',
                 fontFamily: 'Jost, sans-serif',
                 fontSize: '12px',
-                color: 'rgba(255,255,255,0.85)',
-                marginTop: '8px',
+                color: '#E0C8B8',
               }}
             >
-              <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <User size={13} />
-                {post.author || 'Syed Owais Ahmed'}
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <Calendar size={13} />
-                {post.published_date || 'January 2025'}
-              </span>
+              <span>{post.author || 'Syed Owais Ahmed'}</span>
+              <span>•</span>
+              <span>{post.published_date || 'January 2025'}</span>
             </div>
           </div>
         </div>
 
-        {/* Content Body */}
-        <div style={{ padding: '32px' }}>
+        {/* Content */}
+        <div style={{ padding: '32px 28px' }}>
           <div
             style={{
               fontFamily: 'Jost, sans-serif',
-              fontSize: '14px',
-              color: '#1E1610',
+              fontSize: '14.5px',
               lineHeight: 1.8,
+              color: '#3B2921',
               whiteSpace: 'pre-line',
             }}
           >
@@ -162,22 +152,14 @@ export const PostModal: React.FC<PostModalProps> = ({ post, onClose, settings })
           >
             <button
               onClick={onClose}
+              className="btn btn-outline"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
                 height: '42px',
                 padding: '0 20px',
-                borderRadius: '999px',
-                backgroundColor: 'transparent',
-                border: '1.5px solid #E2D5CA',
-                color: '#1E1610',
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '12px',
-                fontWeight: 600,
+                borderRadius: '5px',
+                fontSize: '11px',
                 letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
+                gap: '6px',
               }}
             >
               <ArrowLeft size={14} />
@@ -188,21 +170,15 @@ export const PostModal: React.FC<PostModalProps> = ({ post, onClose, settings })
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
+              className="btn btn-whatsapp"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
                 height: '42px',
                 padding: '0 20px',
-                borderRadius: '999px',
-                backgroundColor: '#25D366',
-                color: '#FFFFFF',
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '12px',
-                fontWeight: 600,
+                borderRadius: '5px',
+                fontSize: '11px',
                 letterSpacing: '0.1em',
-                textTransform: 'uppercase',
                 textDecoration: 'none',
+                gap: '6px',
               }}
             >
               <MessageCircle size={15} />

@@ -106,10 +106,27 @@ export const Header: React.FC<HeaderProps> = ({
     dropdownTimer.current = setTimeout(() => setDropdownOpen(false), 120);
   };
 
+  const headerWrapperRef = useRef<HTMLDivElement>(null);
+
+  // Measure and publish dynamic header height to CSS variable --header-total-height
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      if (headerWrapperRef.current) {
+        const height = headerWrapperRef.current.offsetHeight;
+        document.documentElement.style.setProperty('--header-total-height', `${height}px`);
+      }
+    };
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+    return () => window.removeEventListener('resize', updateHeaderHeight);
+  }, [mobileOpen, scrolled, headerVisible]);
+
   const whatsappUrl = `https://wa.me/${settings.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Hello Gold N Glow!')}`;
 
   return (
     <div
+      ref={headerWrapperRef}
+      className="header-unified-wrapper"
       style={{
         position: isOnHome ? 'fixed' : 'sticky',
         top: 0,
@@ -123,106 +140,18 @@ export const Header: React.FC<HeaderProps> = ({
         boxShadow: headerVisible && isOnHome ? '0 4px 20px rgba(30,22,16,0.08)' : 'none',
       }}
     >
-      {/* ── Top Info Bar (Desktop Only - Removed on Mobile as Requested) ─────────── */}
-      <div
-        className="header-top-bar hidden lg:block"
-        style={{
-          width: '100%',
-          backgroundColor: '#FAE6E3',
-          color: '#5C4A3E',
-          fontSize: '11px',
-          fontWeight: 500,
-          letterSpacing: '0.04em',
-          padding: '8px 0',
-          fontFamily: 'Jost, sans-serif',
-          borderBottom: '1px solid #EBE1D8',
-        }}
-      >
-        <div
-          className="container"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '12px',
-          }}
-        >
-          {/* Left: Trust claim */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
-            <span style={{ color: '#C0846A', fontSize: '9px', flexShrink: 0 }}>•</span>
-            <span className="truncate" style={{ fontSize: '10.5px' }}>
-              <span className="hidden sm:inline">Hyderabad's Most Trusted Bangle Store Since 2002</span>
-              <span className="inline sm:hidden font-medium">Bangle Store Since 2002 • Hyderabad</span>
-            </span>
-          </div>
-
-          {/* Center: Store Timings */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-            className="hidden md:flex"
-          >
-            <Clock size={12} style={{ color: '#C0846A' }} />
-            <span>Store Timings: 10:30 AM – 9:00 PM</span>
-          </div>
-
-          {/* Right: Contact & WhatsApp */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                color: '#5C4A3E',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-                fontSize: '10.5px',
-              }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = '#C0846A')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = '#5C4A3E')}
-            >
-              <MessageCircle size={12} style={{ color: '#25D366' }} />
-              <span className="hidden xs:inline">WhatsApp</span>
-            </a>
-            <span style={{ color: '#D5C7BC' }}>|</span>
-            <a
-              href={`tel:${settings.phone}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                color: '#5C4A3E',
-                textDecoration: 'none',
-                fontWeight: 600,
-                fontSize: '10.5px',
-              }}
-            >
-              <Phone size={10} style={{ color: '#C0846A' }} />
-              <span className="hidden sm:inline">{settings.phone || '+91 98490 12345'}</span>
-              <span className="inline sm:hidden">Call</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Main Header ──────────────────────────────── */}
+      {/* ── 1. MAIN NAVBAR (ALWAYS ON TOP) ──────────────────────────────── */}
       <header
+        className="header-main-nav"
         style={{
           width: '100%',
-          position: 'sticky',
-          top: 0,
+          position: 'relative',
           zIndex: 50,
-          backgroundColor: scrolled ? 'rgba(252, 232, 229, 0.96)' : '#FCE8E5',
+          backgroundColor: scrolled ? 'rgba(252, 232, 229, 0.98)' : '#FCE8E5',
           borderBottom: '1px solid #E2D5CA',
           backdropFilter: scrolled ? 'blur(12px)' : 'none',
           transition: 'box-shadow 0.25s ease, background-color 0.25s ease',
-          boxShadow: scrolled ? '0 2px 20px rgba(30,22,16,0.07)' : 'none',
+          boxShadow: scrolled ? '0 2px 16px rgba(30,22,16,0.06)' : 'none',
         }}
       >
         <div
@@ -286,7 +215,7 @@ export const Header: React.FC<HeaderProps> = ({
                         border: 'none',
                         cursor: 'pointer',
                         transition: 'color 0.2s ease',
-                        borderRadius: '6px',
+                        borderRadius: '4px',
                       }}
                       onMouseEnter={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.color = '#C0846A'; }}
                       onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.color = '#1E1610'; }}
@@ -318,84 +247,63 @@ export const Header: React.FC<HeaderProps> = ({
                           padding: '24px',
                           display: 'grid',
                           gridTemplateColumns: '1fr 1fr',
-                          gap: '20px',
+                          gap: '16px',
                           zIndex: 100,
-                          animation: 'fadeIn 0.18s ease',
                         }}
-                        onMouseEnter={openDropdown}
-                        onMouseLeave={closeDropdown}
                       >
-                        {/* Left: categories */}
-                        <div>
-                          <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A08878', marginBottom: '12px', fontFamily: 'Jost, sans-serif' }}>
-                            EXPLORE BY CATEGORY
-                          </p>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                            {link.children.map((child, ci) => (
-                              <a
-                                key={ci}
-                                href={`#${child.key}`}
-                                onClick={(e) => { e.preventDefault(); handleNavigate(child.key); }}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                  padding: '10px 12px',
-                                  borderRadius: '10px',
-                                  textDecoration: 'none',
-                                  transition: 'background-color 0.15s ease',
-                                  border: '1px solid transparent',
-                                }}
-                                onMouseEnter={(e) => {
-                                  (e.currentTarget as HTMLElement).style.backgroundColor = '#F0E4DC';
-                                  (e.currentTarget as HTMLElement).style.borderColor = '#E2D5CA';
-                                }}
-                                onMouseLeave={(e) => {
-                                  (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-                                  (e.currentTarget as HTMLElement).style.borderColor = 'transparent';
-                                }}
-                              >
-                                <div>
-                                  <div style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: '16px', fontWeight: 600, color: '#1E1610' }}>
-                                    {child.label}
-                                  </div>
-                                  <div style={{ fontFamily: 'Jost, sans-serif', fontSize: '12px', color: '#7A6356', marginTop: '1px' }}>
-                                    {child.desc}
-                                  </div>
-                                </div>
-                                <ArrowRight size={13} style={{ color: '#C0846A', flexShrink: 0 }} />
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                        {/* Right: featured */}
-                        <div>
-                          <p style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A08878', marginBottom: '12px', fontFamily: 'Jost, sans-serif' }}>
-                            FEATURED SPOTLIGHT
-                          </p>
-                          <div
+                        {link.children.map((child, idx) => (
+                          <a
+                            key={`${child.key}-${idx}`}
+                            href={`#${child.key}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleNavigate(child.key);
+                            }}
                             style={{
-                              borderRadius: '12px',
-                              overflow: 'hidden',
-                              border: '1px solid #E2D5CA',
-                              aspectRatio: '4 / 3',
-                              backgroundColor: '#F0E4DC',
-                              marginBottom: '12px',
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '12px',
+                              padding: '12px',
+                              borderRadius: '8px',
+                              textDecoration: 'none',
+                              transition: 'background-color 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = '#FAF6F3';
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
                             }}
                           >
-                            <img
-                              src="/assets/collections/bridal-heritage.jpg"
-                              alt="Bridal Heritage Collection"
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            />
-                          </div>
-                          <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '17px', fontWeight: 600, color: '#1E1610' }}>
-                            The Royal Nizami Bridal Suite
-                          </p>
-                          <p style={{ fontFamily: 'Jost, sans-serif', fontSize: '12px', color: '#7A6356', marginTop: '3px' }}>
-                            Personally curated by Syed Owais Ahmed
-                          </p>
-                        </div>
+                            <div style={{ flex: 1 }}>
+                              <span
+                                style={{
+                                  display: 'block',
+                                  fontFamily: 'Jost, sans-serif',
+                                  fontSize: '12.5px',
+                                  fontWeight: 600,
+                                  color: '#1E1610',
+                                  marginBottom: '2px',
+                                  letterSpacing: '0.04em',
+                                }}
+                              >
+                                {child.label}
+                              </span>
+                              <span
+                                style={{
+                                  display: 'block',
+                                  fontFamily: 'Jost, sans-serif',
+                                  fontSize: '11px',
+                                  color: '#7A6356',
+                                  lineHeight: 1.4,
+                                }}
+                              >
+                                {child.desc}
+                              </span>
+                            </div>
+                            <ArrowRight size={14} style={{ color: '#C0846A', marginTop: '2px', flexShrink: 0 }} />
+                          </a>
+                        ))}
                       </div>
                     )}
                   </div>
@@ -405,7 +313,7 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <a
                   key={link.key}
-                  href={`#${link.key === 'home' ? '' : link.key}`}
+                  href={`#${link.key}`}
                   onClick={(e) => { e.preventDefault(); handleNavigate(link.key); }}
                   style={{
                     padding: '6px 14px',
@@ -414,27 +322,25 @@ export const Header: React.FC<HeaderProps> = ({
                     fontWeight: 600,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    textDecoration: 'none',
                     color: isActive ? '#C0846A' : '#1E1610',
-                    borderRadius: '6px',
+                    textDecoration: 'none',
                     transition: 'color 0.2s ease',
                     position: 'relative',
                   }}
                   onMouseEnter={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.color = '#C0846A'; }}
-                  onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.color = isActive ? '#C0846A' : '#1E1610'; }}
+                  onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.color = '#1E1610'; }}
                 >
                   {link.label}
                   {isActive && (
                     <span
                       style={{
                         position: 'absolute',
-                        bottom: -1,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '20px',
+                        bottom: '0',
+                        left: '14px',
+                        right: '14px',
                         height: '2px',
                         backgroundColor: '#C0846A',
-                        borderRadius: '2px',
+                        borderRadius: '1px',
                       }}
                     />
                   )}
@@ -443,46 +349,16 @@ export const Header: React.FC<HeaderProps> = ({
             })}
           </nav>
 
-          {/* Right actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-            {/* User Account / Profile */}
-            <button
-              onClick={() => handleNavigate('about')}
-              className="hidden sm:flex header-action-btn"
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'none',
-                border: '1px solid #E2D5CA',
-                color: '#5C4A3E',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
-                (e.currentTarget as HTMLElement).style.color = '#C0846A';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#E2D5CA';
-                (e.currentTarget as HTMLElement).style.color = '#5C4A3E';
-              }}
-              aria-label="User Account"
-            >
-              <User size={15} />
-            </button>
-
-            {/* Cart with Pill Counter */}
+          {/* Right Actions (Shopping Bag, Catalogue & Mobile Toggle) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* Shopping Bag Icon Button */}
             <button
               onClick={onOpenCart}
-              className="header-action-btn"
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
+                position: 'relative',
+                width: '38px',
+                height: '38px',
+                borderRadius: '6px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -490,9 +366,7 @@ export const Header: React.FC<HeaderProps> = ({
                 border: '1px solid #E2D5CA',
                 color: '#5C4A3E',
                 cursor: 'pointer',
-                position: 'relative',
                 transition: 'all 0.2s ease',
-                flexShrink: 0,
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
@@ -526,37 +400,17 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
 
-            {/* Catalogue CTA Button (Solid terracotta with Book icon) */}
+            {/* Catalogue CTA Button (Architectural 5px radius) */}
             <button
               onClick={onOpenCatalogue}
-              className="desktop-catalogue-btn"
+              className="desktop-catalogue-btn btn btn-rose btn-sm"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '0 18px',
+                borderRadius: '5px',
                 height: '38px',
-                borderRadius: '6px',
-                backgroundColor: '#C0846A',
-                color: '#FFFFFF',
-                border: 'none',
-                fontFamily: 'Jost, sans-serif',
+                padding: '0 18px',
                 fontSize: '11px',
-                fontWeight: 600,
                 letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                transition: 'all 0.22s ease',
-                boxShadow: '0 2px 8px rgba(192, 132, 106, 0.25)',
                 whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#A06A50';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
               }}
             >
               <span>CATALOGUE</span>
@@ -570,7 +424,7 @@ export const Header: React.FC<HeaderProps> = ({
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '8px',
+                borderRadius: '5px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -588,7 +442,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Dropdown Menu */}
         {mobileOpen && (
           <div
             style={{
@@ -613,7 +467,7 @@ export const Header: React.FC<HeaderProps> = ({
                       textTransform: 'uppercase',
                       color: currentPage === link.key ? '#C0846A' : '#1E1610',
                       textDecoration: 'none',
-                      borderRadius: '10px',
+                      borderRadius: '4px',
                       transition: 'background-color 0.15s ease',
                       display: 'block',
                     }}
@@ -627,34 +481,25 @@ export const Header: React.FC<HeaderProps> = ({
               <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #E2D5CA', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 <button
                   onClick={() => { onOpenCatalogue(); setMobileOpen(false); }}
+                  className="btn btn-rose"
                   style={{
                     flex: 1,
                     minWidth: '140px',
-                    height: '44px',
-                    borderRadius: '999px',
-                    backgroundColor: '#C0846A',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    fontFamily: 'Jost, sans-serif',
+                    height: '42px',
+                    borderRadius: '5px',
                     fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
+                    letterSpacing: '0.12em',
                   }}
                 >
-                  Catalogue <ArrowRight size={11} />
+                  <span>Catalogue</span>
+                  <ArrowRight size={12} />
                 </button>
                 <button
                   onClick={() => { onOpenCart(); setMobileOpen(false); }}
                   style={{
-                    height: '44px',
-                    width: '44px',
-                    borderRadius: '50%',
+                    height: '42px',
+                    width: '42px',
+                    borderRadius: '5px',
                     backgroundColor: 'transparent',
                     color: '#1E1610',
                     border: '1px solid #E2D5CA',
@@ -664,6 +509,7 @@ export const Header: React.FC<HeaderProps> = ({
                     justifyContent: 'center',
                     position: 'relative',
                   }}
+                  aria-label="Open cart"
                 >
                   <ShoppingBag size={17} />
                   {cartCount > 0 && (
@@ -678,17 +524,106 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </header>
 
+      {/* ── 2. ANNOUNCEMENT / INFO BAR (ALWAYS DIRECTLY BELOW NAVBAR) ─────────── */}
+      <div
+        className="header-announcement-bar"
+        style={{
+          width: '100%',
+          backgroundColor: '#FAE6E3',
+          color: '#5C4A3E',
+          fontSize: '11px',
+          fontWeight: 500,
+          letterSpacing: '0.04em',
+          padding: '7px 0',
+          fontFamily: 'Jost, sans-serif',
+          borderBottom: '1px solid #EBE1D8',
+          position: 'relative',
+          zIndex: 40,
+        }}
+      >
+        <div
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+          }}
+        >
+          {/* Left: Trust claim */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
+            <span style={{ color: '#C0846A', fontSize: '9px', flexShrink: 0 }}>•</span>
+            <span className="truncate" style={{ fontSize: '10.5px' }}>
+              <span className="hidden sm:inline">Hyderabad's Most Trusted Bangle Store Since 2002</span>
+              <span className="inline sm:hidden font-medium text-[10px]">Trusted Bangle Store Since 2002 • Tolichowki</span>
+            </span>
+          </div>
+
+          {/* Center: Store Timings (Desktop) */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            className="hidden md:flex"
+          >
+            <Clock size={12} style={{ color: '#C0846A' }} />
+            <span>Store Timings: 10:30 AM – 9:00 PM</span>
+          </div>
+
+          {/* Right: Contact & WhatsApp */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                color: '#5C4A3E',
+                textDecoration: 'none',
+                transition: 'color 0.2s ease',
+                fontSize: '10.5px',
+                fontWeight: 600,
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = '#C0846A')}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = '#5C4A3E')}
+            >
+              <MessageCircle size={12} style={{ color: '#25D366' }} />
+              <span className="hidden xs:inline">WhatsApp</span>
+            </a>
+            <span style={{ color: '#D5C7BC' }}>|</span>
+            <a
+              href={`tel:${settings.phone}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                color: '#5C4A3E',
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '10.5px',
+              }}
+            >
+              <Phone size={10} style={{ color: '#C0846A' }} />
+              <span className="hidden sm:inline">{settings.phone || '+91 98490 12345'}</span>
+              <span className="inline sm:hidden">Call</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @media (min-width: 1024px) {
           .desktop-nav { display: flex !important; }
           .mobile-menu-btn { display: none !important; }
           .desktop-catalogue-btn { display: flex !important; }
-          .header-top-bar { display: block !important; }
         }
         @media (max-width: 1023px) {
           .desktop-nav { display: none !important; }
           .desktop-catalogue-btn { display: none !important; }
-          .header-top-bar { display: none !important; }
           .header-main-nav-inner {
             height: 58px !important;
             gap: 8px !important;

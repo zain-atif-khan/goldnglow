@@ -124,7 +124,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                 onClick={() => setSelectedCategory(cat.id)}
                 style={{
                   padding: '10px 24px',
-                  borderRadius: '999px',
+                  borderRadius: '5px',
                   fontFamily: 'Jost, sans-serif',
                   fontSize: '12px',
                   fontWeight: 600,
@@ -154,7 +154,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                 alignItems: 'center',
                 gap: '8px',
                 padding: '10px 24px',
-                borderRadius: '999px',
+                borderRadius: '5px',
                 backgroundColor: '#FDF5E6',
                 border: '1.5px solid #E5C483',
                 color: '#9E6B15',
@@ -292,22 +292,20 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                             {item.badge_label || item.category.toUpperCase()}
                           </span>
                           {item.material && (
-                            <span
-                              style={{
-                                fontFamily: 'Jost, sans-serif',
-                                fontSize: '9px',
-                                fontWeight: 700,
-                                letterSpacing: '0.08em',
-                                textTransform: 'uppercase',
-                                backgroundColor: item.material === 'Lac' ? '#FDF5E6' : item.material === 'Glass' ? '#EEF6FB' : '#FAF0F2',
-                                color: item.material === 'Lac' ? '#9E6B15' : item.material === 'Glass' ? '#2A6F97' : '#9E3345',
-                                border: `1px solid ${item.material === 'Lac' ? '#E5C483' : item.material === 'Glass' ? '#B8D8EA' : '#E8B4BE'}`,
-                                padding: '2px 8px',
-                                borderRadius: '999px',
-                              }}
-                            >
-                              Material: {item.material}
-                            </span>
+                            <>
+                              <span style={{ color: '#D5C7BC', fontSize: '10px' }}>•</span>
+                              <span
+                                className={
+                                  item.material === 'Lac'
+                                    ? 'type-editorial-tag type-editorial-tag-gold'
+                                    : item.material === 'Glass'
+                                    ? 'type-editorial-tag type-editorial-tag-muted'
+                                    : 'type-editorial-tag type-editorial-tag-rose'
+                                }
+                              >
+                                {item.material}
+                              </span>
+                            </>
                           )}
                         </div>
 
@@ -414,24 +412,14 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                           e.stopPropagation();
                           handleAdd(item);
                         }}
+                        className={isAdded ? "btn btn-whatsapp" : "btn btn-rose"}
                         style={{
                           flex: 1,
                           height: '42px',
-                          borderRadius: '999px',
-                          backgroundColor: isAdded ? '#25D366' : '#C0846A',
-                          color: '#FFFFFF',
-                          border: 'none',
-                          fontFamily: 'Jost, sans-serif',
+                          borderRadius: '5px',
                           fontSize: '11px',
-                          fontWeight: 600,
                           letterSpacing: '0.12em',
-                          textTransform: 'uppercase',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
                           gap: '6px',
-                          transition: 'all 0.2s ease',
                         }}
                       >
                         {isAdded ? (
@@ -448,26 +436,28 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                       </button>
 
                       <a
-                        href={waLink}
+                        href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                          `Hello Gold N Glow! I am interested in ${item.title}.`
+                        )}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         style={{
                           width: '42px',
                           height: '42px',
-                          borderRadius: '50%',
+                          borderRadius: '5px',
                           backgroundColor: '#FFFFFF',
                           border: '1.5px solid #E2D5CA',
                           color: '#25D366',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          textDecoration: 'none',
+                          transition: 'all 0.2s ease',
                           flexShrink: 0,
                         }}
-                        aria-label="Inquire on WhatsApp"
+                        title="Inquire on WhatsApp"
                       >
-                        <MessageCircle size={18} />
+                        <MessageCircle size={17} />
                       </a>
                     </div>
                   </div>
@@ -581,21 +571,12 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                       handleAdd(activeModalItem);
                       setActiveModalItem(null);
                     }}
+                    className="btn btn-rose"
                     style={{
                       height: '46px',
-                      borderRadius: '999px',
-                      backgroundColor: '#C0846A',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      fontFamily: 'Jost, sans-serif',
+                      borderRadius: '5px',
                       fontSize: '12px',
-                      fontWeight: 600,
                       letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
                       gap: '8px',
                     }}
                   >
@@ -609,20 +590,13 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="btn btn-whatsapp"
                     style={{
                       height: '46px',
-                      borderRadius: '999px',
-                      backgroundColor: '#25D366',
-                      color: '#FFFFFF',
-                      fontFamily: 'Jost, sans-serif',
+                      borderRadius: '5px',
                       fontSize: '12px',
-                      fontWeight: 600,
                       letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
                       textDecoration: 'none',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
                       gap: '8px',
                     }}
                   >

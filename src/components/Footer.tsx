@@ -83,31 +83,15 @@ export const Footer: React.FC<FooterProps> = ({
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-whatsapp"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backgroundColor: '#25D366',
-                  color: '#FFFFFF',
-                  padding: '0 22px',
                   height: '42px',
-                  borderRadius: '999px',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
+                  padding: '0 22px',
+                  borderRadius: '5px',
+                  fontSize: '11px',
                   letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
+                  gap: '8px',
                   textDecoration: 'none',
-                  boxShadow: '0 4px 14px rgba(37,211,102,0.3)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 18px rgba(37,211,102,0.45)';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 14px rgba(37,211,102,0.3)';
                 }}
               >
                 <MessageCircle size={15} />

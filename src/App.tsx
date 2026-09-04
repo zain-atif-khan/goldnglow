@@ -148,21 +148,31 @@ export const App: React.FC = () => {
   useEffect(() => {
     reloadData();
 
-    // Check hash for initial route
-    const handleHash = () => {
+    // Check path / hash for route
+    const syncRouteFromLocation = () => {
+      const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (window.location.pathname === '/admin' || hash === 'admin') {
+
+      if (path === '/admin' || hash === 'admin') {
         setCurrentPage('admin');
-      } else if (['collections', 'bridal', 'about', 'story', 'experience', 'contact'].includes(hash)) {
-        if (hash === 'story') setCurrentPage('about');
-        else setCurrentPage(hash);
+      } else if (path === '/collections' || hash === 'collections') {
+        setCurrentPage('collections');
+      } else if (path === '/bridal-heritage' || path === '/bridal' || hash === 'bridal' || hash === 'bridal-heritage') {
+        setCurrentPage('bridal');
+      } else if (path === '/about' || path === '/story' || hash === 'about' || hash === 'story') {
+        setCurrentPage('about');
+      } else if (path === '/experience' || hash === 'experience') {
+        setCurrentPage('experience');
+      } else if (path === '/contact' || hash === 'contact') {
+        setCurrentPage('contact');
       } else {
         setCurrentPage('home');
       }
     };
 
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
+    syncRouteFromLocation();
+    window.addEventListener('popstate', syncRouteFromLocation);
+    window.addEventListener('hashchange', syncRouteFromLocation);
 
     // Track scroll proximity to bottom for Dynamic Curtain Elevation & Docking
     const handleScroll = () => {
@@ -187,7 +197,8 @@ export const App: React.FC = () => {
     });
 
     return () => {
-      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', syncRouteFromLocation);
+      window.removeEventListener('hashchange', syncRouteFromLocation);
       window.removeEventListener('scroll', handleScroll);
       unsubscribe();
     };
@@ -225,9 +236,22 @@ export const App: React.FC = () => {
     setCartItems([]);
   };
 
+  const pageToPath: Record<string, string> = {
+    home: '/',
+    collections: '/collections',
+    bridal: '/bridal-heritage',
+    about: '/about',
+    experience: '/experience',
+    contact: '/contact',
+    admin: '/admin',
+  };
+
   const navigateTo = (page: string) => {
     setCurrentPage(page);
-    window.location.hash = page === 'home' ? '' : page;
+    const targetPath = pageToPath[page] || (page === 'home' ? '/' : `/${page}`);
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState({ page }, '', targetPath);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -366,7 +390,7 @@ export const App: React.FC = () => {
         style={{
           position: 'relative',
           zIndex: 10,
-          backgroundColor: 'transparent',
+          backgroundColor: '#FCE8E5',
           boxShadow: curtainDocked
             ? '0 0 0 0 transparent'
             : '0 35px 80px -15px rgba(27, 18, 14, 0.40)',

@@ -201,21 +201,14 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
                 <a
                   href="/assets/hero/hero-bangles.png"
                   download="Gold-N-Glow-Lookbook.png"
+                  className="btn btn-rose"
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    height: '48px',
-                    borderRadius: '999px',
-                    backgroundColor: '#C0846A',
-                    color: '#FFFFFF',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    height: '46px',
+                    borderRadius: '5px',
+                    fontSize: '11.5px',
                     letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
                     textDecoration: 'none',
+                    gap: '8px',
                   }}
                 >
                   <Download size={14} />
@@ -226,25 +219,18 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="btn btn-whatsapp"
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    height: '48px',
-                    borderRadius: '999px',
-                    backgroundColor: '#25D366',
-                    color: '#FFFFFF',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    height: '46px',
+                    borderRadius: '5px',
+                    fontSize: '11.5px',
                     letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
                     textDecoration: 'none',
+                    gap: '8px',
                   }}
                 >
                   <MessageCircle size={15} />
-                  <span>GET CATALOGUE ON WHATSAPP</span>
+                  <span>REQUEST ON WHATSAPP</span>
                 </a>
               </div>
             </div>
@@ -363,28 +349,18 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
 
               <button
                 type="submit"
+                className="btn btn-rose w-full justify-center"
                 style={{
-                  height: '48px',
-                  borderRadius: '999px',
-                  backgroundColor: '#C0846A',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  marginTop: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  height: '46px',
+                  borderRadius: '5px',
+                  fontSize: '11.5px',
+                  letterSpacing: '0.12em',
                   gap: '8px',
-                  transition: 'background-color 0.2s ease',
+                  marginTop: '8px',
                 }}
               >
                 <Download size={14} />
-                <span>UNLOCK 2025 LOOKBOOK</span>
+                <span>REQUEST INSTANT LOOKBOOK</span>
               </button>
 
               <p

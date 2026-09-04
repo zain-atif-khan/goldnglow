@@ -124,32 +124,10 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
             margin: '0 auto 56px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '12px',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.26em',
-                textTransform: 'uppercase',
-                color: '#8C4D15',
-              }}
-            >
-              EXPLORE OUR CATALOGUE
-            </span>
-          </div>
-
           <h2
             style={{
               fontFamily: 'Cormorant Garamond, Georgia, serif',
-              fontSize: 'clamp(28px, 3.8vw, 42px)',
+              fontSize: 'clamp(32px, 4.2vw, 48px)',
               fontWeight: 600,
               color: '#120A06',
               lineHeight: 1.15,
@@ -350,34 +328,14 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
                     onOpenCatalogue();
                   }
                 }}
+                className="btn btn-rose"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
+                  height: '44px',
                   padding: '0 26px',
-                  height: '42px',
-                  borderRadius: '4px',
-                  backgroundColor: '#C0846A',
-                  color: '#FFFFFF',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '10.5px',
-                  fontWeight: 600,
+                  borderRadius: '5px',
+                  fontSize: '11px',
                   letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  textDecoration: 'none',
-                  border: '1px solid #C0846A',
-                  boxShadow: '0 2px 8px rgba(192, 132, 106, 0.25)',
-                  transition: 'all 0.2s ease',
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = '#A06A50';
-                  (e.currentTarget as HTMLElement).style.borderColor = '#A06A50';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                  (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
+                  gap: '8px',
                 }}
               >
                 <span>EXPLORE THIS SET</span>
@@ -393,33 +351,14 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
                     onSelectCollection(signatureItems[0]);
                   }
                 }}
+                className="btn btn-outline"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '0 22px',
-                  height: '42px',
-                  borderRadius: '4px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  color: '#C0846A',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '10.5px',
-                  fontWeight: 600,
+                  height: '44px',
+                  padding: '0 24px',
+                  borderRadius: '5px',
+                  fontSize: '11px',
                   letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  textDecoration: 'none',
-                  border: '1.5px solid #C0846A',
-                  transition: 'all 0.2s ease',
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                  (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                  (e.currentTarget as HTMLElement).style.color = '#C0846A';
+                  gap: '8px',
                 }}
               >
                 <span>VIEW FULL CATALOGUE</span>

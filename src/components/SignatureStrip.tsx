@@ -165,18 +165,13 @@ export const SignatureStrip: React.FC<SignatureStripProps> = ({
             {story.title}
           </h3>
           <span
-            style={{
-              fontFamily: 'Jost, sans-serif',
-              fontSize: '9px',
-              fontWeight: 700,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              backgroundColor: story.material === 'Lac' ? '#FDF5E6' : story.material === 'Glass' ? '#EEF6FB' : '#FAF0F2',
-              color: story.material === 'Lac' ? '#9E6B15' : story.material === 'Glass' ? '#2A6F97' : '#9E3345',
-              border: `1px solid ${story.material === 'Lac' ? '#E5C483' : story.material === 'Glass' ? '#B8D8EA' : '#E8B4BE'}`,
-              padding: '2px 8px',
-              borderRadius: '999px',
-            }}
+            className={
+              story.material === 'Lac'
+                ? 'type-editorial-tag type-editorial-tag-gold'
+                : story.material === 'Glass'
+                ? 'type-editorial-tag type-editorial-tag-muted'
+                : 'type-editorial-tag type-editorial-tag-rose'
+            }
           >
             {story.material}
           </span>
@@ -222,34 +217,10 @@ export const SignatureStrip: React.FC<SignatureStripProps> = ({
             e.stopPropagation();
             handleAction(story);
           }}
-          className="w-full sm:w-auto justify-center"
+          className="btn btn-rose btn-sm w-full sm:w-auto"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '0 22px',
-            height: '42px',
-            borderRadius: '4px',
-            backgroundColor: '#C0846A',
-            color: '#FFFFFF',
-            fontFamily: 'Jost, sans-serif',
-            fontSize: '10.5px',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            border: '1px solid #C0846A',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            boxShadow: '0 2px 8px rgba(192, 132, 106, 0.2)',
-            whiteSpace: 'nowrap',
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.backgroundColor = '#A06A50';
-            (e.currentTarget as HTMLElement).style.borderColor = '#A06A50';
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-            (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
+            borderRadius: '5px',
+            gap: '8px',
           }}
         >
           <span>EXPLORE COLLECTION</span>

@@ -67,28 +67,12 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
             maxWidth: '560px',
           }}
         >
-          {/* Eyebrow */}
-          <div style={{ marginBottom: '16px' }}>
-            <span
-              style={{
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.26em',
-                textTransform: 'uppercase',
-                color: '#8C4D15',
-              }}
-            >
-              YOUR PERFECT PAIR AWAITS
-            </span>
-          </div>
-
           {/* Headline */}
           <div style={{ marginBottom: '20px' }}>
             <h2
               style={{
                 fontFamily: 'Cormorant Garamond, Georgia, serif',
-                fontSize: 'clamp(28px, 6.5vw, 46px)',
+                fontSize: 'clamp(32px, 6.5vw, 50px)',
                 fontWeight: 600,
                 lineHeight: 1.06,
                 color: '#120A06',
@@ -100,7 +84,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
             <h3
               style={{
                 fontFamily: 'Cormorant Garamond, Georgia, serif',
-                fontSize: 'clamp(24px, 5.5vw, 42px)',
+                fontSize: 'clamp(28px, 5.5vw, 44px)',
                 fontWeight: 500,
                 fontStyle: 'italic',
                 lineHeight: 1.1,
@@ -138,18 +122,17 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
             <button
               type="button"
               onClick={onOpenStoreModal}
-              className="flex items-center gap-2.5 text-left group cursor-pointer"
-              style={{ background: 'none', border: 'none', padding: 0 }}
+              className="flex items-center gap-2.5 text-left group bg-transparent border-0 p-0 cursor-pointer"
             >
               <div className="text-[#C0846A] flex-shrink-0">
                 <Store size={18} strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
                 <h5 className="font-['Jost'] text-[10.5px] font-bold tracking-wider uppercase text-[#1E1610] whitespace-nowrap">
-                  VISIT OUR STORE
+                  TOLICHOWKI STORE
                 </h5>
                 <p className="font-['Jost'] text-[12px] text-[#5C4A3E] leading-snug whitespace-nowrap">
-                  Tolichowki, Hyderabad
+                  Open Daily 10:30 AM
                 </p>
               </div>
             </button>
@@ -164,7 +147,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
               rel="noopener noreferrer"
               className="flex items-center gap-2.5 text-left group text-decoration-none cursor-pointer"
             >
-              <div className="text-[#C0846A] flex-shrink-0">
+              <div className="text-[#25D366] flex-shrink-0">
                 <MessageCircle size={18} strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
@@ -214,35 +197,14 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
                   if (target) target.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="w-full sm:w-auto justify-center"
+              className="btn btn-rose w-full sm:w-auto justify-center"
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '0 26px',
-                height: '42px',
-                borderRadius: '4px',
-                backgroundColor: '#C0846A',
-                color: '#FFFFFF',
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '10.5px',
-                fontWeight: 600,
+                height: '44px',
+                padding: '0 28px',
+                borderRadius: '5px',
+                fontSize: '11px',
                 letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                border: '1px solid #C0846A',
-                boxShadow: '0 2px 8px rgba(192, 132, 106, 0.2)',
-                transition: 'all 0.2s ease',
-                whiteSpace: 'nowrap',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#A06A50';
-                (e.currentTarget as HTMLElement).style.borderColor = '#A06A50';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
+                gap: '8px',
               }}
             >
               <span>EXPLORE COLLECTIONS</span>
@@ -254,32 +216,15 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
+              className="btn btn-whatsapp w-full sm:w-auto justify-center"
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '0 24px',
-                height: '42px',
-                borderRadius: '4px',
-                backgroundColor: '#FFFFFF',
-                color: '#C0846A',
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '10.5px',
-                fontWeight: 600,
+                height: '44px',
+                padding: '0 26px',
+                borderRadius: '5px',
+                fontSize: '11px',
                 letterSpacing: '0.14em',
-                textTransform: 'uppercase',
+                gap: '8px',
                 textDecoration: 'none',
-                border: '1.5px solid #C0846A',
-                transition: 'all 0.2s ease',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#FFFFFF';
-                (e.currentTarget as HTMLElement).style.color = '#C0846A';
               }}
             >
               <span>CHAT WITH US</span>

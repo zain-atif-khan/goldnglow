@@ -172,23 +172,15 @@ export const AboutPage: React.FC<AboutPageProps> = ({ founder, settings }) => {
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="btn btn-rose"
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
+                    height: '48px',
                     padding: '0 28px',
-                    height: '50px',
-                    borderRadius: '999px',
-                    backgroundColor: '#C0846A',
-                    color: '#FFFFFF',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    borderRadius: '5px',
+                    fontSize: '11.5px',
                     letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
                     textDecoration: 'none',
-                    border: '1.5px solid #C0846A',
-                    boxShadow: '0 4px 16px rgba(192,132,106,0.28)',
+                    gap: '8px',
                   }}
                 >
                   <MessageCircle size={15} />

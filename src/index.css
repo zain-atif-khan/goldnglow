@@ -111,8 +111,8 @@ body[data-theme="royal-green"] {
   --section-py:        96px;
   --card-radius:       16px;
   --card-radius-lg:    20px;
-  --btn-radius:        9999px;
-  --input-radius:      10px;
+  --btn-radius:        5px;
+  --input-radius:      8px;
 
   --shadow-xs: 0 1px 3px rgba(18, 22, 20, 0.04);
   --shadow-sm: 0 2px 8px rgba(18, 22, 20, 0.06);
@@ -322,102 +322,219 @@ button {
 .divider-center { justify-content: center; }
 .divider-line { height: 1px; background-color: var(--color-accent); opacity: 0.5; width: 48px; flex-shrink: 0; }
 
-/* ─── Buttons ───────────────────────────────────────────────── */
+/* ─── Global Luxury Button System (Architectural & Diagonal Sweep) ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 0 28px;
+  height: 48px;
+  border-radius: var(--btn-radius);
   font-family: var(--font-body);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  border-radius: var(--btn-radius);
-  transition: all 0.22s ease;
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
   border: none;
-  outline: none;
+  outline: 1.5px solid transparent;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 800ms cubic-bezier(0.25, 1, 0.5, 1),
+              transform 800ms cubic-bezier(0.25, 1, 0.5, 1),
+              outline 800ms cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 800ms cubic-bezier(0.25, 1, 0.5, 1),
+              background-color 800ms cubic-bezier(0.25, 1, 0.5, 1);
+  box-sizing: border-box;
 }
 
-.btn-primary {
+.btn > * {
+  position: relative;
+  z-index: 2;
+  transition: transform 600ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  left: -60px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  transform: skewX(45deg);
+  z-index: 1;
+  transition: width 800ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: scale(1.03);
+  }
+  .btn:hover::before {
+    width: 250%;
+  }
+}
+
+/* 1. Primary Gold Variant */
+.btn-primary,
+.btn-gold {
+  background-color: #9E6B15;
+  color: #FFFFFF;
+  outline: 1.5px solid #9E6B15;
+  box-shadow: 0 4px 14px -2px rgba(158, 107, 21, 0.3);
+}
+.btn-primary::before,
+.btn-gold::before {
+  background-color: #7A5210;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover,
+  .btn-gold:hover {
+    color: #FFFFFF;
+    outline: 1.5px solid #C4A460;
+    box-shadow: 0 8px 24px -3px rgba(158, 107, 21, 0.42);
+  }
+}
+
+/* 2. Rose Gold / Terracotta Variant */
+.btn-rose {
   background-color: var(--color-accent);
   color: #FFFFFF;
-  font-size: 12px;
-  padding: 0 28px;
-  height: 48px;
-  border: 1.5px solid var(--color-accent);
-  box-shadow: 0 4px 14px rgba(var(--color-accent-rgb, 192, 132, 106), 0.3);
+  outline: 1.5px solid var(--color-accent);
+  box-shadow: 0 4px 14px -2px rgba(192, 132, 106, 0.32);
+}
+.btn-rose::before {
+  background-color: #8A2E20;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-rose:hover {
+    color: #FFFFFF;
+    outline: 1.5px solid #D49D85;
+    box-shadow: 0 8px 24px -3px rgba(192, 132, 106, 0.42);
+  }
 }
 
-.btn-primary:hover {
-  background-color: var(--color-accent-dark);
-  border-color: var(--color-accent-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(var(--color-accent-rgb, 192, 132, 106), 0.38);
-  color: #FFFFFF;
-}
-
+/* 3. Luxury Outline / Translucent Variant */
 .btn-outline {
-  background-color: transparent;
-  color: var(--color-accent);
-  font-size: 12px;
-  padding: 0 28px;
-  height: 48px;
-  border: 1.5px solid var(--color-accent);
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #8A2E20;
+  outline: 1.5px solid #E8B4BE;
+  box-shadow: 0 2px 10px rgba(138, 46, 32, 0.08);
+}
+.btn-outline::before {
+  background-color: #8A2E20;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-outline:hover {
+    color: #FFFFFF;
+    outline: 1.5px solid #8A2E20;
+    box-shadow: 0 6px 20px -2px rgba(138, 46, 32, 0.3);
+  }
 }
 
-.btn-outline:hover {
-  background-color: var(--color-accent);
+/* 4. Deep Charcoal Variant */
+.btn-dark {
+  background-color: #1E1610;
   color: #FFFFFF;
-  transform: translateY(-1px);
+  outline: 1.5px solid #1E1610;
+  box-shadow: 0 4px 14px -2px rgba(30, 22, 16, 0.3);
+}
+.btn-dark::before {
+  background-color: #3A2A20;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-dark:hover {
+    color: #FFFFFF;
+    outline: 1.5px solid #6E5345;
+    box-shadow: 0 8px 24px -3px rgba(30, 22, 16, 0.4);
+  }
 }
 
-.btn-ghost {
-  background-color: transparent;
-  color: var(--color-dark);
-  font-size: 12px;
-  padding: 0 24px;
-  height: 44px;
-  border: 1.5px solid var(--color-border);
-}
-
-.btn-ghost:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-}
-
+/* 5. WhatsApp Brand Variant */
 .btn-whatsapp {
   background-color: #25D366;
   color: #FFFFFF;
-  font-size: 12px;
-  padding: 0 28px;
-  height: 48px;
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.28);
+  outline: 1.5px solid #25D366;
+  box-shadow: 0 4px 14px -2px rgba(37, 211, 102, 0.28);
+}
+.btn-whatsapp::before {
+  background-color: #1EBE5D;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-whatsapp:hover {
+    color: #FFFFFF;
+    outline: 1.5px solid #55E48C;
+    box-shadow: 0 8px 22px -2px rgba(37, 211, 102, 0.4);
+  }
 }
 
-.btn-whatsapp:hover {
-  background-color: #20BA5A;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.36);
-  color: #FFFFFF;
+/* 6. Ghost / Subtle Link Button */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-dark);
+  outline: 1.5px solid var(--color-border);
+}
+.btn-ghost::before {
+  background-color: var(--color-accent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-ghost:hover {
+    color: #FFFFFF;
+    outline: 1.5px solid var(--color-accent);
+  }
 }
 
-.btn-sm { height: 40px !important; padding: 0 20px !important; font-size: 11px !important; }
-.btn-dark {
-  background-color: var(--color-dark);
-  color: #FFFFFF;
-  font-size: 12px;
-  padding: 0 28px;
-  height: 48px;
-  border: 1.5px solid var(--color-dark);
+.btn-sm {
+  height: 40px !important;
+  padding: 0 20px !important;
+  font-size: 10.5px !important;
 }
-.btn-dark:hover {
-  background-color: var(--color-charcoal);
-  border-color: var(--color-charcoal);
-  transform: translateY(-1px);
-  color: #FFFFFF;
+
+.btn-lg {
+  height: 52px !important;
+  padding: 0 34px !important;
+  font-size: 12px !important;
+}
+
+/* ─── Editorial Fashion Micro-Labels (No Pill/Container) ───── */
+.type-editorial-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #8A2E20;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.type-editorial-tag-gold {
+  color: #9E6B15 !important;
+}
+
+.type-editorial-tag-rose {
+  color: #C0846A !important;
+}
+
+.type-editorial-tag-muted {
+  color: #7A6356 !important;
+}
+
+/* ─── Cinematic Layered Footer Reveal Depth Transition ─────── */
+.curtain-depth-edge {
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 28px 60px -10px rgba(18, 10, 6, 0.45);
 }
 
 /* ─── Cards ─────────────────────────────────────────────────── */
@@ -521,7 +638,7 @@ button {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.92);
   color: var(--color-accent);
   border: 1px solid var(--color-border-light);

@@ -36,36 +36,14 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
         <div
           style={{
             textAlign: 'center',
-            maxWidth: '680px',
-            margin: '0 auto 48px',
+            maxWidth: '640px',
+            margin: '0 auto 56px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '12px',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.26em',
-                textTransform: 'uppercase',
-                color: '#8C4D15',
-              }}
-            >
-              HYDERABAD SHOWROOM
-            </span>
-          </div>
-
           <h2
             style={{
               fontFamily: 'Cormorant Garamond, Georgia, serif',
-              fontSize: 'clamp(28px, 3.8vw, 42px)',
+              fontSize: 'clamp(32px, 4.2vw, 48px)',
               fontWeight: 600,
               color: '#120A06',
               lineHeight: 1.15,
@@ -258,32 +236,15 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-rose"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
+                  height: '44px',
                   padding: '0 24px',
-                  height: '42px',
-                  borderRadius: '4px',
-                  backgroundColor: '#C0846A',
-                  color: '#FFFFFF',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '10.5px',
-                  fontWeight: 600,
+                  borderRadius: '5px',
+                  fontSize: '11px',
                   letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
                   textDecoration: 'none',
-                  border: '1px solid #C0846A',
-                  boxShadow: '0 2px 8px rgba(192,132,106,0.2)',
-                  transition: 'all 0.22s ease',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = '#A06A50';
-                  (e.currentTarget as HTMLElement).style.borderColor = '#A06A50';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                  (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
+                  gap: '8px',
                 }}
               >
                 <MessageCircle size={14} />
@@ -293,31 +254,14 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
               {onOpenStoreModal && (
                 <button
                   onClick={onOpenStoreModal}
+                  className="btn btn-outline"
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
+                    height: '44px',
                     padding: '0 24px',
-                    height: '42px',
-                    borderRadius: '4px',
-                    backgroundColor: '#FFFFFF',
-                    color: '#C0846A',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '10.5px',
-                    fontWeight: 600,
+                    borderRadius: '5px',
+                    fontSize: '11px',
                     letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    border: '1px solid #C0846A',
-                    cursor: 'pointer',
-                    transition: 'all 0.22s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-                    (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = '#FFFFFF';
-                    (e.currentTarget as HTMLElement).style.color = '#C0846A';
+                    gap: '8px',
                   }}
                 >
                   <MapPin size={14} />
@@ -367,7 +311,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
                   right: '16px',
                   backgroundColor: 'rgba(255,255,255,0.92)',
                   backdropFilter: 'blur(8px)',
-                  borderRadius: '999px',
+                  borderRadius: '4px',
                   padding: '5px 12px',
                   display: 'flex',
                   alignItems: 'center',

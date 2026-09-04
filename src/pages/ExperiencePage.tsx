@@ -250,23 +250,15 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ settings }) => {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-rose"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '0 28px',
                   height: '48px',
-                  borderRadius: '999px',
-                  backgroundColor: '#C0846A',
-                  color: '#FFFFFF',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  padding: '0 28px',
+                  borderRadius: '5px',
+                  fontSize: '11.5px',
                   letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
                   textDecoration: 'none',
-                  border: '1.5px solid #C0846A',
-                  boxShadow: '0 4px 16px rgba(192,132,106,0.28)',
+                  gap: '8px',
                 }}
               >
                 <MessageCircle size={15} />
@@ -277,22 +269,15 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ settings }) => {
                 href={settings.google_maps_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-outline"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '0 24px',
                   height: '48px',
-                  borderRadius: '999px',
-                  backgroundColor: '#FFFFFF',
-                  color: '#1E1610',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  padding: '0 24px',
+                  borderRadius: '5px',
+                  fontSize: '11.5px',
                   letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  border: '1.5px solid #E2D5CA',
                   textDecoration: 'none',
+                  gap: '8px',
                 }}
               >
                 <Navigation size={14} />

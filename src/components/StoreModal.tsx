@@ -217,21 +217,14 @@ export const StoreModal: React.FC<StoreModalProps> = ({
                 href={settings.google_maps_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-rose"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
                   height: '44px',
-                  borderRadius: '999px',
-                  backgroundColor: '#C0846A',
-                  color: '#FFFFFF',
-                  fontFamily: 'Jost, sans-serif',
+                  borderRadius: '5px',
                   fontSize: '11px',
-                  fontWeight: 600,
                   letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
                   textDecoration: 'none',
+                  gap: '8px',
                 }}
               >
                 <Navigation size={13} />
@@ -242,25 +235,18 @@ export const StoreModal: React.FC<StoreModalProps> = ({
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-whatsapp"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
                   height: '44px',
-                  borderRadius: '999px',
-                  backgroundColor: '#25D366',
-                  color: '#FFFFFF',
-                  fontFamily: 'Jost, sans-serif',
+                  borderRadius: '5px',
                   fontSize: '11px',
-                  fontWeight: 600,
                   letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
                   textDecoration: 'none',
+                  gap: '8px',
                 }}
               >
                 <MessageCircle size={14} />
-                <span>BOOK VISIT ON WHATSAPP</span>
+                <span>CHAT WITH STORE TEAM</span>
               </a>
             </div>
           </div>

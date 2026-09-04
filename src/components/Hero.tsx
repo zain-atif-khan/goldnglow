@@ -356,36 +356,23 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
           <div className="hero-actions-group" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
             <button
               type="button"
-              onClick={scrollToNextSection}
+              onClick={() => {
+                if (onNavigate) {
+                  onNavigate('collections');
+                } else {
+                  scrollToNextSection();
+                }
+              }}
+              className="btn btn-gold"
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0 28px',
                 height: '46px',
-                borderRadius: '999px',
-                backgroundColor: '#9E6B15',
-                color: '#FFFFFF',
-                fontFamily: 'Jost, sans-serif',
+                padding: '0 28px',
+                borderRadius: '5px',
                 fontSize: '11px',
-                fontWeight: 600,
                 letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(158, 107, 21, 0.25)',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#7A5210';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#9E6B15';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
               }}
             >
-              EXPLORE COLLECTIONS
+              <span>EXPLORE COLLECTIONS</span>
             </button>
 
             <button
@@ -398,36 +385,16 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
                   if (target) target.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
+              className="btn btn-outline"
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0 26px',
                 height: '46px',
-                borderRadius: '999px',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                color: '#8A2E20',
-                border: '1.5px solid #E8B4BE',
-                fontFamily: 'Jost, sans-serif',
+                padding: '0 26px',
+                borderRadius: '5px',
                 fontSize: '11px',
-                fontWeight: 600,
                 letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                boxShadow: '0 2px 8px rgba(138, 46, 32, 0.08)',
-                transition: 'all 0.2s ease',
-                cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#FAF0F2';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
               }}
             >
-              BRIDAL HERITAGE
+              <span>BRIDAL HERITAGE</span>
             </button>
           </div>
         </div>

@@ -276,7 +276,7 @@ export const WristSizeGuideModal: React.FC<WristSizeGuideModalProps> = ({
                               backgroundColor: '#9E6B15',
                               color: '#FFFFFF',
                               padding: '1px 5px',
-                              borderRadius: '999px',
+                              borderRadius: '2px',
                               letterSpacing: '0.05em',
                             }}
                           >
@@ -414,26 +414,16 @@ export const WristSizeGuideModal: React.FC<WristSizeGuideModalProps> = ({
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
+            className="btn btn-whatsapp"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '0 22px',
               height: '42px',
-              borderRadius: '999px',
-              backgroundColor: '#25D366',
-              color: '#FFFFFF',
-              fontFamily: 'Jost, sans-serif',
-              fontSize: '11.5px',
-              fontWeight: 600,
+              padding: '0 22px',
+              borderRadius: '5px',
+              fontSize: '11px',
               letterSpacing: '0.08em',
-              textTransform: 'uppercase',
               textDecoration: 'none',
-              boxShadow: '0 4px 12px rgba(37, 211, 102, 0.25)',
-              transition: 'transform 0.2s ease',
+              gap: '8px',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
           >
             <MessageCircle size={15} />
             <span>Confirm Size with Stylist</span>

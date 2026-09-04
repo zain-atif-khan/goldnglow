@@ -37,32 +37,10 @@ export const FoundersPicks: React.FC<FoundersPicksProps> = ({
             margin: '0 auto 56px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '12px',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.26em',
-                textTransform: 'uppercase',
-                color: '#8C4D15',
-              }}
-            >
-              FOUNDER'S PICKS
-            </span>
-          </div>
-
           <h2
             style={{
               fontFamily: 'Cormorant Garamond, Georgia, serif',
-              fontSize: 'clamp(28px, 3.8vw, 42px)',
+              fontSize: 'clamp(32px, 4.2vw, 48px)',
               fontWeight: 600,
               color: '#120A06',
               lineHeight: 1.15,
@@ -143,27 +121,6 @@ export const FoundersPicks: React.FC<FoundersPicksProps> = ({
                     }}
                     loading="lazy"
                   />
-                  {/* Rose Gold Pill Tag */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '14px',
-                      left: '14px',
-                      backgroundColor: 'rgba(255,255,255,0.92)',
-                      backdropFilter: 'blur(6px)',
-                      border: '1px solid rgba(192,132,106,0.3)',
-                      borderRadius: '999px',
-                      padding: '4px 10px',
-                      fontFamily: 'Jost, sans-serif',
-                      fontSize: '9.5px',
-                      fontWeight: 700,
-                      letterSpacing: '0.16em',
-                      textTransform: 'uppercase',
-                      color: '#8C4D15',
-                    }}
-                  >
-                    FOUNDER'S SELECTION
-                  </div>
                 </div>
 
                 {/* Body Content with Terracotta Number Box */}
@@ -191,17 +148,10 @@ export const FoundersPicks: React.FC<FoundersPicksProps> = ({
 
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <span
-                      style={{
-                        fontFamily: 'Jost, sans-serif',
-                        fontSize: '9.5px',
-                        fontWeight: 700,
-                        letterSpacing: '0.16em',
-                        textTransform: 'uppercase',
-                        color: '#C0846A',
-                        marginBottom: '2px',
-                      }}
+                      className="type-editorial-tag type-editorial-tag-rose"
+                      style={{ marginBottom: '4px' }}
                     >
-                      FOUNDER PICK
+                      FOUNDER SELECTION
                     </span>
 
                     <h3
@@ -290,32 +240,14 @@ export const FoundersPicks: React.FC<FoundersPicksProps> = ({
                 onSelectPick(activePicks[0]);
               }
             }}
+            className="btn btn-outline"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '0 26px',
-              height: '42px',
-              borderRadius: '4px',
-              backgroundColor: '#FFFFFF',
-              color: '#C0846A',
-              fontFamily: 'Jost, sans-serif',
-              fontSize: '10.5px',
-              fontWeight: 600,
+              height: '44px',
+              padding: '0 28px',
+              borderRadius: '5px',
+              fontSize: '11px',
               letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              border: '1.5px solid #C0846A',
-              cursor: 'pointer',
-              transition: 'all 0.22s ease',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-              (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#FFFFFF';
-              (e.currentTarget as HTMLElement).style.color = '#C0846A';
+              gap: '8px',
             }}
           >
             <span>VIEW FULL CURATION</span>

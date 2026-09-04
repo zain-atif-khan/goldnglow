@@ -186,23 +186,15 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="btn btn-rose"
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
+                    height: '48px',
                     padding: '0 28px',
-                    height: '50px',
-                    borderRadius: '999px',
-                    backgroundColor: '#C0846A',
-                    color: '#FFFFFF',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    borderRadius: '5px',
+                    fontSize: '11.5px',
                     letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
                     textDecoration: 'none',
-                    border: '1.5px solid #C0846A',
-                    boxShadow: '0 4px 16px rgba(192,132,106,0.28)',
+                    gap: '8px',
                   }}
                 >
                   <MessageCircle size={15} />
@@ -211,22 +203,14 @@ export const BridalPage: React.FC<BridalPageProps> = ({
 
                 <button
                   onClick={onOpenCatalogue}
+                  className="btn btn-outline"
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
+                    height: '48px',
                     padding: '0 24px',
-                    height: '50px',
-                    borderRadius: '999px',
-                    backgroundColor: 'transparent',
-                    color: '#1E1610',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    borderRadius: '5px',
+                    fontSize: '11.5px',
                     letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    border: '1.5px solid #E2D5CA',
-                    cursor: 'pointer',
+                    gap: '8px',
                   }}
                 >
                   <span>VIEW BRIDAL LOOKBOOK</span>
@@ -318,7 +302,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                     onClick={() => setSelectedMaterial(tab.id)}
                     style={{
                       padding: '8px 20px',
-                      borderRadius: '999px',
+                      borderRadius: '5px',
                       fontFamily: 'Jost, sans-serif',
                       fontSize: '11px',
                       fontWeight: 600,
@@ -348,7 +332,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                     alignItems: 'center',
                     gap: '8px',
                     padding: '9px 22px',
-                    borderRadius: '999px',
+                    borderRadius: '5px',
                     backgroundColor: '#FAF0F2',
                     border: '1.5px solid #E8B4BE',
                     color: '#9E3345',
@@ -474,22 +458,22 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                           >
                             {set.tag}
                           </span>
-                          <span
-                            style={{
-                              fontFamily: 'Jost, sans-serif',
-                              fontSize: '9px',
-                              fontWeight: 700,
-                              letterSpacing: '0.08em',
-                              textTransform: 'uppercase',
-                              backgroundColor: set.material === 'Lac' ? '#FDF5E6' : set.material === 'Glass' ? '#EEF6FB' : '#FAF0F2',
-                              color: set.material === 'Lac' ? '#9E6B15' : set.material === 'Glass' ? '#2A6F97' : '#9E3345',
-                              border: `1px solid ${set.material === 'Lac' ? '#E5C483' : set.material === 'Glass' ? '#B8D8EA' : '#E8B4BE'}`,
-                              padding: '2px 8px',
-                              borderRadius: '999px',
-                            }}
-                          >
-                            Material: {set.material}
-                          </span>
+                          {set.material && (
+                            <>
+                              <span style={{ color: '#D5C7BC', fontSize: '10px' }}>•</span>
+                              <span
+                                className={
+                                  set.material === 'Lac'
+                                    ? 'type-editorial-tag type-editorial-tag-gold'
+                                    : set.material === 'Glass'
+                                    ? 'type-editorial-tag type-editorial-tag-muted'
+                                    : 'type-editorial-tag type-editorial-tag-rose'
+                                }
+                              >
+                                {set.material}
+                              </span>
+                            </>
+                          )}
                         </div>
                         <h3
                           style={{
@@ -517,34 +501,17 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
+                        className="btn btn-whatsapp w-full justify-center"
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
                           height: '42px',
-                          borderRadius: '999px',
-                          backgroundColor: '#FFFFFF',
-                          border: '1.5px solid #E2D5CA',
-                          color: '#1E1610',
-                          fontFamily: 'Jost, sans-serif',
+                          borderRadius: '5px',
                           fontSize: '11px',
-                          fontWeight: 600,
                           letterSpacing: '0.12em',
-                          textTransform: 'uppercase',
                           textDecoration: 'none',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.borderColor = '#C0846A';
-                          (e.currentTarget as HTMLElement).style.color = '#C0846A';
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.borderColor = '#E2D5CA';
-                          (e.currentTarget as HTMLElement).style.color = '#1E1610';
+                          gap: '8px',
                         }}
                       >
-                        <MessageCircle size={14} style={{ color: '#25D366' }} />
+                        <MessageCircle size={14} />
                         <span>INQUIRE BRIDAL PRICE</span>
                       </a>
                     </div>

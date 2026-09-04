@@ -245,22 +245,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ settings }) => {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="btn btn-whatsapp w-full justify-center"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
                   height: '48px',
-                  borderRadius: '999px',
-                  backgroundColor: '#25D366',
-                  color: '#FFFFFF',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  borderRadius: '5px',
+                  fontSize: '11.5px',
                   letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
                   textDecoration: 'none',
-                  boxShadow: '0 4px 14px rgba(37,211,102,0.28)',
+                  gap: '8px',
                 }}
               >
                 <MessageCircle size={16} />
@@ -523,27 +515,18 @@ export const ContactPage: React.FC<ContactPageProps> = ({ settings }) => {
 
                 <button
                   type="submit"
+                  className="btn btn-rose w-full justify-center"
                   style={{
                     height: '48px',
-                    borderRadius: '999px',
-                    backgroundColor: '#C0846A',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    borderRadius: '5px',
+                    fontSize: '11.5px',
                     letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                     gap: '8px',
                     marginTop: '6px',
                   }}
                 >
                   <Send size={14} />
-                  <span>SUBMIT INQUIRY</span>
+                  <span>SEND ENQUIRY</span>
                 </button>
               </form>
             )}
