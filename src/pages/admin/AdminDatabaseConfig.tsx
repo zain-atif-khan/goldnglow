@@ -128,7 +128,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>
             <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#1E1610', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '8px' }}>
-              Supabase Project URL (e.g. https://xyzcompany.supabase.co)
+              Supabase Project URL
             </label>
             <div style={{ position: 'relative' }}>
               <Globe size={18} style={{ position: 'absolute', left: '14px', top: '14px', color: '#A27068', pointerEvents: 'none' }} />
@@ -136,7 +136,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://your-project.supabase.co"
+                placeholder="Enter your project URL (or set VITE_SUPABASE_URL)"
                 style={{
                   width: '100%',
                   height: '46px',
@@ -156,7 +156,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE
 
           <div>
             <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: '#1E1610', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '8px' }}>
-              Supabase Anon / Public Key (eyJhbGciOi...)
+              Supabase Anon / Public Key
             </label>
             <div style={{ position: 'relative' }}>
               <Key size={18} style={{ position: 'absolute', left: '14px', top: '14px', color: '#A27068', pointerEvents: 'none' }} />
@@ -164,7 +164,7 @@ ALTER PUBLICATION supabase_realtime ADD TABLE
                 type="password"
                 value={anonKey}
                 onChange={(e) => setAnonKey(e.target.value)}
-                placeholder="eyJhbGciOi..."
+                placeholder="Enter your public anon key (or set VITE_SUPABASE_ANON_KEY)"
                 style={{
                   width: '100%',
                   height: '46px',
