@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Download, MessageCircle, Check, BookOpen } from 'lucide-react';
 import { SiteSettings } from '../lib/database.types';
 import { DataService } from '../lib/dataService';
@@ -18,6 +19,27 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
   const [phone, setPhone] = useState('');
   const [interest, setInterest] = useState('Bridal Bangles');
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.classList.add('modal-open', 'bangle-modal-active');
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.touchAction = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -39,18 +61,23 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
     `Hello Gold N Glow! My name is ${name || 'Customer'}. Please send me the 2025 Bangle Lookbook & Catalogue.`
   )}`;
 
-  return (
+  return createPortal(
     <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 100,
-        backgroundColor: 'rgba(30,22,16,0.6)',
-        backdropFilter: 'blur(6px)',
+        zIndex: 999999,
+        backgroundColor: 'rgba(30,22,16,0.7)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
+        overscrollBehavior: 'contain',
       }}
     >
       <div
@@ -60,6 +87,7 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
           maxWidth: '520px',
           maxHeight: '90dvh',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid #E2D5CA',
@@ -372,12 +400,13 @@ export const CatalogueModal: React.FC<CatalogueModalProps> = ({
                   marginTop: '4px',
                 }}
               >
-                🔒 We respect your privacy. No spam. Direct WhatsApp support only.
+                We respect your privacy. No spam. Direct WhatsApp support only.
               </p>
             </form>
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

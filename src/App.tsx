@@ -1,31 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
-import { CollectionsPage } from './pages/CollectionsPage';
-import { BridalPage } from './pages/BridalPage';
-import { AboutPage } from './pages/AboutPage';
-import { ExperiencePage } from './pages/ExperiencePage';
-import { ContactPage } from './pages/ContactPage';
 import { BottomTrustBar } from './components/BottomTrustBar';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
-import { MobileBottomNav } from './components/MobileBottomNav';
 
-// Admin CMS Pages
-import { AdminLayout, AdminTab } from './pages/admin/AdminLayout';
-import { AdminLogin } from './pages/admin/AdminLogin';
-import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminHero } from './pages/admin/AdminHero';
-import { AdminCollections } from './pages/admin/AdminCollections';
-import { AdminFounder } from './pages/admin/AdminFounder';
-import { AdminFounderPicks } from './pages/admin/AdminFounderPicks';
-import { AdminWhyUs } from './pages/admin/AdminWhyUs';
-import { AdminExperience } from './pages/admin/AdminExperience';
-import { AdminTestimonials } from './pages/admin/AdminTestimonials';
-import { AdminJournal } from './pages/admin/AdminJournal';
-import { AdminMediaLibrary } from './pages/admin/AdminMediaLibrary';
-import { AdminStoreSettings } from './pages/admin/AdminStoreSettings';
-import { AdminDatabaseConfig } from './pages/admin/AdminDatabaseConfig';
+// Non-critical pages — code split for smaller initial bundle
+const CollectionsPage = lazy(() => import('./pages/CollectionsPage').then(m => ({ default: m.CollectionsPage })));
+const BridalPage = lazy(() => import('./pages/BridalPage').then(m => ({ default: m.BridalPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const ExperiencePage = lazy(() => import('./pages/ExperiencePage').then(m => ({ default: m.ExperiencePage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+
+// Admin CMS Pages — lazy loaded (never needed by regular visitors)
+import type { AdminTab } from './pages/admin/AdminLayout';
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout').then(m => ({ default: m.AdminLayout })));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+const AdminHero = lazy(() => import('./pages/admin/AdminHero').then(m => ({ default: m.AdminHero })));
+const AdminCollections = lazy(() => import('./pages/admin/AdminCollections').then(m => ({ default: m.AdminCollections })));
+const AdminFounder = lazy(() => import('./pages/admin/AdminFounder').then(m => ({ default: m.AdminFounder })));
+const AdminFounderPicks = lazy(() => import('./pages/admin/AdminFounderPicks').then(m => ({ default: m.AdminFounderPicks })));
+const AdminWhyUs = lazy(() => import('./pages/admin/AdminWhyUs').then(m => ({ default: m.AdminWhyUs })));
+const AdminExperience = lazy(() => import('./pages/admin/AdminExperience').then(m => ({ default: m.AdminExperience })));
+const AdminTestimonials = lazy(() => import('./pages/admin/AdminTestimonials').then(m => ({ default: m.AdminTestimonials })));
+const AdminJournal = lazy(() => import('./pages/admin/AdminJournal').then(m => ({ default: m.AdminJournal })));
+const AdminMediaLibrary = lazy(() => import('./pages/admin/AdminMediaLibrary').then(m => ({ default: m.AdminMediaLibrary })));
+const AdminStoreSettings = lazy(() => import('./pages/admin/AdminStoreSettings').then(m => ({ default: m.AdminStoreSettings })));
+const AdminDatabaseConfig = lazy(() => import('./pages/admin/AdminDatabaseConfig').then(m => ({ default: m.AdminDatabaseConfig })));
 
 // Modals
 import { CatalogueModal } from './components/CatalogueModal';
@@ -35,6 +37,7 @@ import { CartDrawer, CartItem } from './components/CartDrawer';
 import { PostModal } from './components/PostModal';
 import { PolicyModal } from './components/PolicyModal';
 import { WristSizeGuideModal } from './components/WristSizeGuideModal';
+import { BangleDetailModal } from './components/BangleDetailModal';
 
 // Data Service & Types
 import { DataService, subscribeToUpdates } from './lib/dataService';
@@ -98,7 +101,9 @@ export const App: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedPost, setSelectedPost] = useState<JournalPost | null>(null);
   const [policyTitle, setPolicyTitle] = useState<string | null>(null);
+  const [homeDetailItem, setHomeDetailItem] = useState<CollectionItem | null>(null);
   const [curtainDocked, setCurtainDocked] = useState(false);
+  const [footerBlur, setFooterBlur] = useState<number>(0);
 
   // Load All Data
   const reloadData = async () => {
@@ -150,6 +155,23 @@ export const App: React.FC = () => {
 
     // Check path / hash for route
     const syncRouteFromLocation = () => {
+      // Dismiss any open modals and guarantee body scroll is completely unlocked
+      setCartOpen(false);
+      setCatalogueOpen(false);
+      setStoreModalOpen(false);
+      setAboutModalOpen(false);
+      setSelectedPost(null);
+      setPolicyTitle(null);
+      setSizeGuideOpen(false);
+      setHomeDetailItem(null);
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.overflowY = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflowY = '';
+      document.documentElement.style.touchAction = '';
+
       const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
       const hash = window.location.hash.replace('#', '').toLowerCase();
 
@@ -159,10 +181,8 @@ export const App: React.FC = () => {
         setCurrentPage('collections');
       } else if (path === '/bridal-heritage' || path === '/bridal' || hash === 'bridal' || hash === 'bridal-heritage') {
         setCurrentPage('bridal');
-      } else if (path === '/about' || path === '/story' || hash === 'about' || hash === 'story') {
+      } else if (path === '/about' || path === '/story' || path === '/experience' || hash === 'about' || hash === 'story' || hash === 'experience') {
         setCurrentPage('about');
-      } else if (path === '/experience' || hash === 'experience') {
-        setCurrentPage('experience');
       } else if (path === '/contact' || hash === 'contact') {
         setCurrentPage('contact');
       } else {
@@ -174,12 +194,32 @@ export const App: React.FC = () => {
     window.addEventListener('popstate', syncRouteFromLocation);
     window.addEventListener('hashchange', syncRouteFromLocation);
 
-    // Track scroll proximity to bottom for Dynamic Curtain Elevation & Docking
+    // Track scroll proximity to bottom for Dynamic Curtain Elevation, Docking & Subtle Cinematic Blur
     const handleScroll = () => {
+      // Disable blur calculations on mobile completely (mobile footer is normal static)
+      if (window.innerWidth <= 768) {
+        setFooterBlur(0);
+        return;
+      }
+
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollPos = window.scrollY + window.innerHeight;
       const distFromBottom = scrollHeight - scrollPos;
       
+      // Peak blur is very slight (max 2.5px) and clears to 0px well before GOLD N GLOW arch arrives (within ~420px of bottom)
+      const maxBlur = 2.5;
+      const clearThreshold = 420; // At this distance, footer text and GOLD N GLOW are 100% crisp (0px blur)
+      const revealWindow = 680;
+
+      if (distFromBottom <= clearThreshold) {
+        setFooterBlur(0);
+      } else if (distFromBottom < revealWindow) {
+        const progress = (distFromBottom - clearThreshold) / (revealWindow - clearThreshold);
+        setFooterBlur(Math.round(progress * maxBlur * 10) / 10);
+      } else {
+        setFooterBlur(maxBlur);
+      }
+
       // When user reaches exact bottom (within 40px), dissolve shadow and dock flush
       if (distFromBottom <= 40) {
         setCurtainDocked(true);
@@ -203,6 +243,43 @@ export const App: React.FC = () => {
       unsubscribe();
     };
   }, []);
+
+  // Global Modal Active State: Hide navbar and lock website scroll from behind
+  const isAnyModalOpen = Boolean(
+    catalogueOpen ||
+    storeModalOpen ||
+    aboutModalOpen ||
+    cartOpen ||
+    selectedPost ||
+    policyTitle ||
+    sizeGuideOpen ||
+    homeDetailItem
+  );
+
+  useEffect(() => {
+    if (isAnyModalOpen) {
+      document.body.classList.add('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.overflowY = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflowY = '';
+      document.documentElement.style.touchAction = '';
+    }
+
+    return () => {
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.overflowY = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflowY = '';
+      document.documentElement.style.touchAction = '';
+    };
+  }, [isAnyModalOpen]);
 
   // Cart Management
   const handleAddToCart = (item: CollectionItem, size: string = '2.6') => {
@@ -241,14 +318,32 @@ export const App: React.FC = () => {
     collections: '/collections',
     bridal: '/bridal-heritage',
     about: '/about',
-    experience: '/experience',
+    experience: '/about',
     contact: '/contact',
     admin: '/admin',
   };
 
   const navigateTo = (page: string) => {
-    setCurrentPage(page);
-    const targetPath = pageToPath[page] || (page === 'home' ? '/' : `/${page}`);
+    // Dismiss all modals and ensure body scroll is completely unlocked
+    setCartOpen(false);
+    setCatalogueOpen(false);
+    setStoreModalOpen(false);
+    setAboutModalOpen(false);
+    setSelectedPost(null);
+    setPolicyTitle(null);
+    setSizeGuideOpen(false);
+    setHomeDetailItem(null);
+    document.body.classList.remove('modal-open', 'bangle-modal-active');
+    document.body.style.overflow = '';
+    document.body.style.overflowY = '';
+    document.body.style.touchAction = '';
+    document.documentElement.style.overflow = '';
+    document.documentElement.style.overflowY = '';
+    document.documentElement.style.touchAction = '';
+
+    const targetPage = page === 'experience' ? 'about' : page;
+    setCurrentPage(targetPage);
+    const targetPath = pageToPath[targetPage] || (targetPage === 'home' ? '/' : `/${targetPage}`);
     if (window.location.pathname !== targetPath) {
       window.history.pushState({ page }, '', targetPath);
     }
@@ -259,114 +354,118 @@ export const App: React.FC = () => {
   if (currentPage === 'admin') {
     if (!adminAuthUser) {
       return (
-        <AdminLogin
-          onLoginSuccess={(email: string) => setAdminAuthUser(email)}
-          onBackToSite={() => navigateTo('home')}
-        />
+        <Suspense fallback={null}>
+          <AdminLogin
+            onLoginSuccess={(email: string) => setAdminAuthUser(email)}
+            onBackToSite={() => navigateTo('home')}
+          />
+        </Suspense>
       );
     }
 
     return (
-      <AdminLayout
-        activeTab={adminTab}
-        onTabChange={(tab) => setAdminTab(tab)}
-        onLogout={() => {
-          sessionStorage.removeItem('goldnglow_admin_auth');
-          setAdminAuthUser(null);
-          navigateTo('home');
-        }}
-        onViewSite={() => navigateTo('home')}
-        adminEmail={adminAuthUser}
-      >
-        {adminTab === 'dashboard' && (
-          <AdminDashboard
-            onNavigate={(t: AdminTab) => setAdminTab(t)}
-            collections={collections}
-            posts={journalPosts}
-            testimonials={testimonials}
-            enquiries={enquiries}
-            mediaAssets={mediaAssets}
-            onResetDefaults={async () => {
-              await DataService.resetToDefaults();
-              await reloadData();
-            }}
-          />
-        )}
+      <Suspense fallback={null}>
+        <AdminLayout
+          activeTab={adminTab}
+          onTabChange={(tab: AdminTab) => setAdminTab(tab)}
+          onLogout={() => {
+            sessionStorage.removeItem('goldnglow_admin_auth');
+            setAdminAuthUser(null);
+            navigateTo('home');
+          }}
+          onViewSite={() => navigateTo('home')}
+          adminEmail={adminAuthUser}
+        >
+          {adminTab === 'dashboard' && (
+            <AdminDashboard
+              onNavigate={(t: AdminTab) => setAdminTab(t)}
+              collections={collections}
+              posts={journalPosts}
+              testimonials={testimonials}
+              enquiries={enquiries}
+              mediaAssets={mediaAssets}
+              onResetDefaults={async () => {
+                await DataService.resetToDefaults();
+                await reloadData();
+              }}
+            />
+          )}
 
-        {adminTab === 'hero' && (
-          <AdminHero
-            initialContent={hero}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'hero' && (
+            <AdminHero
+              initialContent={hero}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'collections' && (
-          <AdminCollections
-            collections={collections}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'collections' && (
+            <AdminCollections
+              collections={collections}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'founder' && (
-          <AdminFounder
-            initialContent={founder}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'founder' && (
+            <AdminFounder
+              initialContent={founder}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'picks' && (
-          <AdminFounderPicks
-            picks={founderPicks}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'picks' && (
+            <AdminFounderPicks
+              picks={founderPicks}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'whyus' && (
-          <AdminWhyUs
-            items={whyUsItems}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'whyus' && (
+            <AdminWhyUs
+              items={whyUsItems}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'experience' && (
-          <AdminExperience
-            initialContent={experience}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'experience' && (
+            <AdminExperience
+              initialContent={experience}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'testimonials' && (
-          <AdminTestimonials
-            testimonials={testimonials}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'testimonials' && (
+            <AdminTestimonials
+              testimonials={testimonials}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'journal' && (
-          <AdminJournal
-            posts={journalPosts}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'journal' && (
+            <AdminJournal
+              posts={journalPosts}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'media' && (
-          <AdminMediaLibrary
-            assets={mediaAssets}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'media' && (
+            <AdminMediaLibrary
+              assets={mediaAssets}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'store' && (
-          <AdminStoreSettings
-            settings={settings}
-            onSaved={reloadData}
-          />
-        )}
+          {adminTab === 'store' && (
+            <AdminStoreSettings
+              settings={settings}
+              onSaved={reloadData}
+            />
+          )}
 
-        {adminTab === 'database' && (
-          <AdminDatabaseConfig />
-        )}
-      </AdminLayout>
+          {adminTab === 'database' && (
+            <AdminDatabaseConfig />
+          )}
+        </AdminLayout>
+      </Suspense>
     );
   }
 
@@ -401,48 +500,7 @@ export const App: React.FC = () => {
           flexDirection: 'column',
         }}
       >
-        {/* SUB-PAGE BREADCRUMB BAR (When not on Home) */}
-        {currentPage !== 'home' && (
-          <div
-            style={{
-              backgroundColor: '#F0E4DC',
-              borderBottom: '1px solid #E2D5CA',
-              padding: '12px 0',
-            }}
-          >
-            <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <button
-                onClick={() => navigateTo('home')}
-                style={{
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  color: '#C0846A',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <span>← Back to Full Homepage Experience</span>
-              </button>
-              <span
-                style={{
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
-                  color: '#7A6356',
-                }}
-              >
-                {currentPage.toUpperCase()}
-              </span>
-            </div>
-          </div>
-        )}
+
 
         {/* 3. MAIN PAGE VIEW */}
         <main style={{ flex: 1 }}>
@@ -462,76 +520,74 @@ export const App: React.FC = () => {
               onOpenAboutModal={() => setAboutModalOpen(true)}
               onOpenPost={(post) => setSelectedPost(post)}
               onSelectCollection={(item) => {
-                if (item.category === 'lac' || item.material === 'Lac') {
-                  setCollectionCategoryFilter('lac');
-                } else if (item.category === 'glass' || item.material === 'Glass') {
-                  setCollectionCategoryFilter('glass');
-                } else if (item.category === 'bridal' || item.material === 'Lac & Glass') {
-                  setCollectionCategoryFilter('bridal');
-                } else {
-                  setCollectionCategoryFilter('all');
-                }
-                navigateTo('collections');
+                setHomeDetailItem(item);
               }}
               onSelectFounderPick={(pick) => {
-                if (pick.title.toLowerCase().includes('lac') || pick.tagline?.toLowerCase().includes('lac')) {
-                  setCollectionCategoryFilter('lac');
-                } else if (pick.title.toLowerCase().includes('glass') || pick.tagline?.toLowerCase().includes('glass')) {
-                  setCollectionCategoryFilter('glass');
+                const match = collections.find((c) => c.title.toLowerCase() === pick.title.toLowerCase());
+                if (match) {
+                  setHomeDetailItem(match);
                 } else {
-                  setCollectionCategoryFilter('all');
+                  setHomeDetailItem({
+                    id: pick.id,
+                    title: pick.title,
+                    subtitle: pick.tagline,
+                    description: pick.description || pick.tagline,
+                    category: 'signature',
+                    material: 'Lac',
+                    image_url: pick.image_url,
+                    badge_label: 'FOUNDER PICK',
+                    display_order: 1,
+                    featured: true,
+                    active: true,
+                  });
                 }
-                navigateTo('collections');
               }}
               onNavigate={navigateTo}
             />
           )}
 
-          {currentPage === 'collections' && (
-            <CollectionsPage
-              collections={collections}
-              onAddToCart={handleAddToCart}
-              onOpenCatalogue={() => setCatalogueOpen(true)}
-              onOpenSizeGuide={() => setSizeGuideOpen(true)}
-              whatsapp={settings.whatsapp}
-              initialCategory={collectionCategoryFilter}
-            />
-          )}
+          <Suspense fallback={null}>
+            {currentPage === 'collections' && (
+              <CollectionsPage
+                collections={collections}
+                onAddToCart={handleAddToCart}
+                onOpenCatalogue={() => setCatalogueOpen(true)}
+                onOpenSizeGuide={() => setSizeGuideOpen(true)}
+                whatsapp={settings.whatsapp}
+                initialCategory={collectionCategoryFilter}
+              />
+            )}
 
-          {currentPage === 'bridal' && (
-            <BridalPage
-              settings={settings}
-              onOpenCatalogue={() => setCatalogueOpen(true)}
-              onOpenSizeGuide={() => setSizeGuideOpen(true)}
-            />
-          )}
+            {currentPage === 'bridal' && (
+              <BridalPage
+                settings={settings}
+                onOpenCatalogue={() => setCatalogueOpen(true)}
+                onOpenSizeGuide={() => setSizeGuideOpen(true)}
+                onAddToCart={handleAddToCart}
+              />
+            )}
 
-          {currentPage === 'about' && (
-            <AboutPage founder={founder} settings={settings} />
-          )}
+            {(currentPage === 'about' || currentPage === 'experience') && (
+              <AboutPage founder={founder} experience={experience} settings={settings} />
+            )}
 
-          {currentPage === 'experience' && (
-            <ExperiencePage content={experience} settings={settings} />
-          )}
-
-          {currentPage === 'contact' && <ContactPage settings={settings} />}
+            {currentPage === 'contact' && <ContactPage settings={settings} />}
+          </Suspense>
         </main>
 
         {/* 4. BOTTOM TRUST BAR */}
         <BottomTrustBar />
+
       </div>
 
-      {/* 3. UNDERNEATH FIXED/STICKY REVEAL FOOTER (Revealed like a curtain lifting) */}
+      {/* 3. UNDERNEATH FIXED/STICKY REVEAL FOOTER (Desktop curtain reveal, mobile normal static) */}
       <div
-        className="curtain-footer-layer"
+        className="curtain-footer-layer curtain-footer-cinematic"
         style={{
-          position: 'sticky',
-          bottom: 0,
-          zIndex: 1,
-          width: '100%',
-          overflow: 'hidden',
+          filter: footerBlur > 0.3 ? `blur(${footerBlur}px)` : 'none',
         }}
       >
+        <div className="footer-cinematic-light" />
         <Footer
           settings={settings}
           onOpenCatalogue={() => setCatalogueOpen(true)}
@@ -541,13 +597,8 @@ export const App: React.FC = () => {
         />
       </div>
 
-      {/* 6. FLOATING CONTROLS — WHATSAPP & MOBILE BOTTOM NAV */}
+      {/* 6. FLOATING WHATSAPP BUTTON */}
       <FloatingWhatsApp settings={settings} />
-      <MobileBottomNav
-        currentPage={currentPage}
-        onNavigate={navigateTo}
-        settings={settings}
-      />
 
       {/* 7. MODALS & DRAWERS */}
       <CatalogueModal
@@ -575,6 +626,7 @@ export const App: React.FC = () => {
         onRemoveItem={handleRemoveFromCart}
         onClearCart={handleClearCart}
         settings={settings}
+        onNavigate={navigateTo}
       />
 
       <PostModal
@@ -591,6 +643,40 @@ export const App: React.FC = () => {
       <WristSizeGuideModal
         isOpen={sizeGuideOpen}
         onClose={() => setSizeGuideOpen(false)}
+        whatsapp={settings.whatsapp}
+      />
+
+      {/* Home Page Bangle Detail Modal with Size Guide & Selector */}
+      <BangleDetailModal
+        isOpen={!!homeDetailItem}
+        onClose={() => setHomeDetailItem(null)}
+        item={
+          homeDetailItem
+            ? {
+                id: homeDetailItem.id,
+                title: homeDetailItem.title,
+                description: homeDetailItem.description || homeDetailItem.subtitle,
+                image: homeDetailItem.image_url,
+                tag:
+                  homeDetailItem.badge_label ||
+                  (homeDetailItem.category === 'lac'
+                    ? 'HANDCRAFTED LAC'
+                    : homeDetailItem.category === 'glass'
+                    ? 'ARTISAN GLASS'
+                    : homeDetailItem.category === 'bridal'
+                    ? 'BRIDAL SUITE'
+                    : 'SIGNATURE COLLECTION'),
+                material: homeDetailItem.material,
+              }
+            : null
+        }
+        onAddToCart={(modalItem, size) => {
+          if (homeDetailItem) {
+            handleAddToCart(homeDetailItem, size || '2.6');
+            setHomeDetailItem(null);
+          }
+        }}
+        onOpenSizeGuide={() => setSizeGuideOpen(true)}
         whatsapp={settings.whatsapp}
       />
     </div>

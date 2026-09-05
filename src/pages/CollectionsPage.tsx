@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { CollectionItem } from '../lib/database.types';
-import { ShoppingBag, MessageCircle, Check, X, Ruler } from 'lucide-react';
+import { ShoppingBag, MessageCircle, Check, X } from 'lucide-react';
 import { BorderGlow } from '../components/BorderGlow';
+import { BangleDetailModal } from '../components/BangleDetailModal';
 
 interface CollectionsPageProps {
   collections: CollectionItem[];
@@ -32,15 +33,15 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
     { id: 'all', label: 'All Bangles' },
     { id: 'lac', label: 'Handcrafted Lac' },
     { id: 'glass', label: 'Artisan Glass' },
-    { id: 'bridal', label: 'Bridal Heritage (Lac & Glass)' },
   ];
 
   const filtered = collections.filter((c) => {
     if (!c.active) return false;
+    // Exclude bridal items from collections page (they belong to dedicated bridal page)
+    if (c.category === 'bridal') return false;
     if (selectedCategory === 'all') return true;
-    if (selectedCategory === 'lac') return c.category === 'lac' || c.material === 'Lac' || c.material === 'Lac & Glass';
-    if (selectedCategory === 'glass') return c.category === 'glass' || c.material === 'Glass' || c.material === 'Lac & Glass';
-    if (selectedCategory === 'bridal') return c.category === 'bridal' || c.material === 'Lac & Glass';
+    if (selectedCategory === 'lac') return c.category === 'lac' || c.material === 'Lac';
+    if (selectedCategory === 'glass') return c.category === 'glass' || c.material === 'Glass';
     return c.category === selectedCategory;
   });
 
@@ -66,20 +67,6 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
             margin: '0 auto 48px',
           }}
         >
-          <span
-            style={{
-              fontFamily: 'Jost, sans-serif',
-              fontSize: '11px',
-              fontWeight: 700,
-              letterSpacing: '0.26em',
-              textTransform: 'uppercase',
-              color: '#8C4D15',
-              display: 'block',
-              marginBottom: '8px',
-            }}
-          >
-            CURATED MASTERPIECES
-          </span>
           <h1
             style={{
               fontFamily: 'Cormorant Garamond, Georgia, serif',
@@ -101,7 +88,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
               color: '#7A6356',
             }}
           >
-            Explore Hyderabad's premier showcase of authentic <strong>Handcrafted Lac</strong> and <strong>Artisan Glass</strong> bangles, alongside royal bridal heirloom churas.
+            Explore Hyderabad's premier showcase of authentic <strong>Handcrafted Lac</strong> and <strong>Artisan Glass</strong> bangles, created with timeless Tolichowki craftsmanship.
           </p>
         </div>
 
@@ -176,8 +163,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <Ruler size={15} />
-              <span>📐 Need Help Finding Your Size? Open Indian Wrist Sizing Guide (2.2 – 2.10)</span>
+              <span>Need Help Finding Your Size? Open Indian Wrist Sizing Guide (2.2 – 2.10)</span>
             </button>
           </div>
         )}
@@ -252,6 +238,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                     <div>
                       {/* Image */}
                       <div
+                        className="collection-card-img-wrap"
                         style={{
                           width: '100%',
                           aspectRatio: '4 / 3.2',
@@ -277,7 +264,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                       </div>
 
                       {/* Body */}
-                      <div style={{ padding: '24px 24px 16px' }}>
+                      <div className="collection-card-body" style={{ padding: '24px 24px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
                           <span
                             style={{
@@ -289,7 +276,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                               color: '#C0846A',
                             }}
                           >
-                            {item.badge_label || item.category.toUpperCase()}
+                            {item.badge_label || (item.category === 'lac' ? 'HANDCRAFTED LAC' : item.category === 'glass' ? 'ARTISAN GLASS' : 'BRIDAL SET')}
                           </span>
                           {item.material && (
                             <>
@@ -310,6 +297,7 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                         </div>
 
                         <h3
+                          className="collection-card-title"
                           style={{
                             fontFamily: 'Cormorant Garamond, Georgia, serif',
                             fontSize: '20px',
@@ -327,86 +315,24 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
                         <p
                           style={{
                             fontFamily: 'Jost, sans-serif',
-                            fontSize: '13px',
+                            fontSize: '12.5px',
                             color: '#7A6356',
-                            lineHeight: 1.55,
+                            lineHeight: 1.5,
                             marginBottom: '16px',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
                           }}
-                          className="line-clamp-2"
+                          className="collection-card-desc"
                         >
                           {item.description || item.subtitle}
                         </p>
-
-                        {/* Size Selector */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span
-                              style={{
-                                fontFamily: 'Jost, sans-serif',
-                                fontSize: '11px',
-                                fontWeight: 700,
-                                color: '#1E1610',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.08em',
-                              }}
-                            >
-                              Size:
-                            </span>
-                            {onOpenSizeGuide && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onOpenSizeGuide();
-                                }}
-                                style={{
-                                  background: 'none',
-                                  border: 'none',
-                                  color: '#9E6B15',
-                                  fontFamily: 'Jost, sans-serif',
-                                  fontSize: '10.5px',
-                                  fontWeight: 600,
-                                  textDecoration: 'underline',
-                                  cursor: 'pointer',
-                                  padding: 0,
-                                }}
-                              >
-                                (📏 Size Guide)
-                              </button>
-                            )}
-                          </div>
-                          <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                            {['2.2', '2.4', '2.6', '2.8', '2.10'].map((size) => (
-                              <button
-                                key={size}
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleSizeChange(item.id, size);
-                                }}
-                                style={{
-                                  padding: '2px 7px',
-                                  borderRadius: '6px',
-                                  border: currentSize === size ? '1.5px solid #9E6B15' : '1px solid #E2D5CA',
-                                  backgroundColor: currentSize === size ? '#FDF5E6' : '#FFFFFF',
-                                  color: currentSize === size ? '#9E6B15' : '#7A6356',
-                                  fontFamily: 'Jost, sans-serif',
-                                  fontSize: '10.5px',
-                                  fontWeight: 700,
-                                  cursor: 'pointer',
-                                  transition: 'all 0.15s ease',
-                                }}
-                              >
-                                {size}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
                       </div>
                     </div>
 
                     {/* Footer Action */}
-                    <div style={{ padding: '0 24px 24px', display: 'flex', gap: '10px' }}>
+                    <div className="collection-card-actions" style={{ padding: '0 24px 24px', display: 'flex', gap: '10px' }}>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -469,146 +395,39 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
       </div>
 
       {/* Product Detail Modal */}
-      {activeModalItem && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 100,
-            backgroundColor: 'rgba(30,22,16,0.6)',
-            backdropFilter: 'blur(6px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-          }}
-        >
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '680px',
-              backgroundColor: '#FFFFFF',
-              borderRadius: '20px',
-              border: '1px solid #E2D5CA',
-              overflow: 'hidden',
-              boxShadow: '0 20px 60px rgba(30,22,16,0.18)',
-            }}
-          >
-            <button
-              onClick={() => setActiveModalItem(null)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                zIndex: 10,
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(255,255,255,0.9)',
-                border: '1px solid #E2D5CA',
-                color: '#1E1610',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <X size={16} />
-            </button>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '24px',
-                alignItems: 'center',
-              }}
-              className="collection-modal-grid"
-            >
-              <div style={{ width: '100%', aspectRatio: '1 / 1', backgroundColor: '#F0E4DC', overflow: 'hidden' }}>
-                <img
-                  src={activeModalItem.image_url}
-                  alt={activeModalItem.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-
-              <div style={{ padding: '32px 32px 32px 0' }}>
-                <span
-                  style={{
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    letterSpacing: '0.18em',
-                    textTransform: 'uppercase',
-                    color: '#C0846A',
-                    display: 'block',
-                    marginBottom: '6px',
-                  }}
-                >
-                  {activeModalItem.badge_label || activeModalItem.category.toUpperCase()}
-                </span>
-                <h3
-                  style={{
-                    fontFamily: 'Cormorant Garamond, serif',
-                    fontSize: '24px',
-                    fontWeight: 600,
-                    color: '#1E1610',
-                    lineHeight: 1.2,
-                    marginBottom: '12px',
-                  }}
-                >
-                  {activeModalItem.title}
-                </h3>
-                <p style={{ fontFamily: 'Jost, sans-serif', fontSize: '13px', color: '#7A6356', lineHeight: 1.6, marginBottom: '20px' }}>
-                  {activeModalItem.description || activeModalItem.subtitle}
-                </p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <button
-                    onClick={() => {
-                      handleAdd(activeModalItem);
-                      setActiveModalItem(null);
-                    }}
-                    className="btn btn-rose"
-                    style={{
-                      height: '46px',
-                      borderRadius: '5px',
-                      fontSize: '12px',
-                      letterSpacing: '0.12em',
-                      gap: '8px',
-                    }}
-                  >
-                    <ShoppingBag size={15} />
-                    <span>ADD TO SHORTLIST</span>
-                  </button>
-
-                  <a
-                    href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                      `Hello Gold N Glow! I want to inquire about ${activeModalItem.title}.`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-whatsapp"
-                    style={{
-                      height: '46px',
-                      borderRadius: '5px',
-                      fontSize: '12px',
-                      letterSpacing: '0.12em',
-                      textDecoration: 'none',
-                      gap: '8px',
-                    }}
-                  >
-                    <MessageCircle size={15} />
-                    <span>INQUIRE ON WHATSAPP</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <BangleDetailModal
+        isOpen={!!activeModalItem}
+        onClose={() => setActiveModalItem(null)}
+        item={
+          activeModalItem
+            ? {
+                id: activeModalItem.id,
+                title: activeModalItem.title,
+                description: activeModalItem.description || activeModalItem.subtitle,
+                image: activeModalItem.image_url,
+                tag:
+                  activeModalItem.badge_label ||
+                  (activeModalItem.category === 'lac'
+                    ? 'HANDCRAFTED LAC'
+                    : activeModalItem.category === 'glass'
+                    ? 'ARTISAN GLASS'
+                    : 'BRIDAL SET'),
+                material: activeModalItem.material,
+              }
+            : null
+        }
+        onAddToCart={(modalItem, size) => {
+          if (activeModalItem) {
+            onAddToCart(activeModalItem, size || '2.6');
+            setAddedItem(activeModalItem.id);
+            setTimeout(() => setAddedItem(null), 2000);
+            setActiveModalItem(null);
+          }
+        }}
+        onOpenSizeGuide={onOpenSizeGuide}
+        whatsapp={whatsapp}
+        isAdded={activeModalItem ? addedItem === activeModalItem.id : false}
+      />
 
       <style>{`
         .collection-card-wrapper {
@@ -644,10 +463,59 @@ export const CollectionsPage: React.FC<CollectionsPageProps> = ({
         }
 
         @media (max-width: 1024px) {
-          .collections-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .collections-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
         }
-        @media (max-width: 640px) {
-          .collections-grid { grid-template-columns: 1fr !important; }
+        @media (max-width: 768px) {
+          .container {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+          }
+          .collections-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+          }
+          .collection-card-img-wrap {
+            aspect-ratio: 1 / 1 !important;
+          }
+          .collection-card-body {
+            padding: 12px 10px 8px !important;
+          }
+          .collection-card-title {
+            font-size: 14.5px !important;
+            line-height: 1.25 !important;
+            font-weight: 600 !important;
+            margin-bottom: 4px !important;
+            word-break: break-word !important;
+            overflow: hidden !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+          }
+          .collection-card-desc {
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+            font-size: 11px !important;
+            line-height: 1.4 !important;
+            margin-bottom: 6px !important;
+            color: #7A6356 !important;
+          }
+          .collection-card-actions {
+            padding: 0 10px 12px !important;
+            gap: 6px !important;
+          }
+          .collection-card-actions button {
+            height: 36px !important;
+            font-size: 9.5px !important;
+            letter-spacing: 0.04em !important;
+            padding: 0 6px !important;
+          }
+          .collection-card-actions a {
+            width: 36px !important;
+            height: 36px !important;
+            flex-shrink: 0 !important;
+          }
           .collection-modal-grid { grid-template-columns: 1fr !important; padding: 20px !important; }
         }
       `}</style>

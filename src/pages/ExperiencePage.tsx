@@ -77,7 +77,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ settings }) => {
           }}
         >
           <img
-            src="/assets/store/store-interior-main.jpg"
+            src="/assets/store/store-interior-main.webp"
             alt="Gold N Glow Store Interior Tolichowki Hyderabad"
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />

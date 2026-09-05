@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, MapPin, Phone, MessageCircle, Clock, Navigation } from 'lucide-react';
 import { SiteSettings } from '../lib/database.types';
 
@@ -13,24 +14,50 @@ export const StoreModal: React.FC<StoreModalProps> = ({
   onClose,
   settings,
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.classList.add('modal-open', 'bangle-modal-active');
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.touchAction = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const whatsappLink = `https://wa.me/${settings.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
     'Hello Gold N Glow! I would like to schedule a visit to your Tolichowki showroom.'
   )}`;
 
-  return (
+  return createPortal(
     <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 100,
-        backgroundColor: 'rgba(30,22,16,0.6)',
-        backdropFilter: 'blur(6px)',
+        zIndex: 999999,
+        backgroundColor: 'rgba(30,22,16,0.7)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
+        overscrollBehavior: 'contain',
       }}
     >
       <div
@@ -40,6 +67,7 @@ export const StoreModal: React.FC<StoreModalProps> = ({
           maxWidth: '640px',
           maxHeight: '90dvh',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid #E2D5CA',
@@ -263,7 +291,7 @@ export const StoreModal: React.FC<StoreModalProps> = ({
             }}
           >
             <img
-              src="/assets/store/store-interior-main.jpg"
+              src="/assets/store/store-interior-main.webp"
               alt="Tolichowki Showroom"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
@@ -279,6 +307,7 @@ export const StoreModal: React.FC<StoreModalProps> = ({
           }
         }
       `}</style>
-    </div>
+    </div>,
+    document.body
   );
 };

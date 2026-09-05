@@ -10,7 +10,6 @@ import {
   BookOpen,
   Clock,
   MessageCircle,
-  Ruler,
 } from 'lucide-react';
 import { GoldNGlowLogo } from './Icons';
 import { SiteSettings } from '../lib/database.types';
@@ -31,15 +30,13 @@ const NAV_LINKS = [
     key: 'collections',
     label: 'COLLECTIONS',
     children: [
-      { key: 'collections', label: 'All Bangles',                  desc: 'Complete Glass & Lac catalog' },
-      { key: 'collections', label: 'Handcrafted Lac Bangles',      desc: 'Heritage Laakh, Jaipuri & royal kadas' },
-      { key: 'collections', label: 'Artisan Glass Bangles',        desc: 'Velvet matte, gold-rimmed & shimmer glass' },
-      { key: 'bridal',      label: 'Bridal Heritage (Lac & Glass)', desc: 'Royal wedding churas & bridal suites' },
+      { key: 'collections', label: 'All Bangles',             desc: 'Complete Glass & Lac catalog' },
+      { key: 'collections', label: 'Handcrafted Lac Bangles', desc: 'Heritage Laakh, Jaipuri & royal kadas' },
+      { key: 'collections', label: 'Artisan Glass Bangles',   desc: 'Velvet matte, gold-rimmed & shimmer glass' },
     ],
   },
   { key: 'bridal',      label: 'BRIDAL' },
   { key: 'about',       label: 'ABOUT US' },
-  { key: 'experience',  label: 'EXPERIENCE' },
   { key: 'contact',     label: 'CONTACT' },
 ];
 
@@ -239,15 +236,15 @@ export const Header: React.FC<HeaderProps> = ({
                           top: 'calc(100% + 8px)',
                           left: '50%',
                           transform: 'translateX(-50%)',
-                          width: '680px',
+                          width: '380px',
                           backgroundColor: '#FFFFFF',
                           borderRadius: '16px',
                           border: '1px solid #E2D5CA',
                           boxShadow: '0 16px 48px rgba(30,22,16,0.12)',
-                          padding: '24px',
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr',
-                          gap: '16px',
+                          padding: '14px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '6px',
                           zIndex: 100,
                         }}
                       >
@@ -478,45 +475,28 @@ export const Header: React.FC<HeaderProps> = ({
                   </a>
                 ))}
               </nav>
-              <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #E2D5CA', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #E2D5CA' }}>
                 <button
                   onClick={() => { onOpenCatalogue(); setMobileOpen(false); }}
                   className="btn btn-rose"
                   style={{
-                    flex: 1,
-                    minWidth: '140px',
-                    height: '42px',
-                    borderRadius: '5px',
-                    fontSize: '11px',
-                    letterSpacing: '0.12em',
-                  }}
-                >
-                  <span>Catalogue</span>
-                  <ArrowRight size={12} />
-                </button>
-                <button
-                  onClick={() => { onOpenCart(); setMobileOpen(false); }}
-                  style={{
-                    height: '42px',
-                    width: '42px',
-                    borderRadius: '5px',
-                    backgroundColor: 'transparent',
-                    color: '#1E1610',
-                    border: '1px solid #E2D5CA',
-                    cursor: 'pointer',
+                    width: '100%',
+                    height: '46px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    letterSpacing: '0.14em',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    position: 'relative',
+                    gap: '10px',
+                    boxShadow: '0 4px 14px rgba(192, 132, 106, 0.25)',
                   }}
-                  aria-label="Open cart"
                 >
-                  <ShoppingBag size={17} />
-                  {cartCount > 0 && (
-                    <span style={{ position: 'absolute', top: '-3px', right: '-3px', width: '16px', height: '16px', borderRadius: '50%', backgroundColor: '#C0846A', color: '#fff', fontSize: '9px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      {cartCount}
-                    </span>
-                  )}
+                  <BookOpen size={16} />
+                  <span>VIEW FULL CATALOGUE</span>
+                  <ArrowRight size={14} />
                 </button>
               </div>
             </div>
@@ -624,11 +604,16 @@ export const Header: React.FC<HeaderProps> = ({
         @media (max-width: 1023px) {
           .desktop-nav { display: none !important; }
           .desktop-catalogue-btn { display: none !important; }
+          .header-announcement-bar { display: none !important; }
           .header-main-nav-inner {
-            height: 58px !important;
-            gap: 8px !important;
-            padding-left: 12px !important;
-            padding-right: 12px !important;
+            height: 72px !important;
+            gap: 12px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+          }
+          .mobile-menu-btn {
+            width: 42px !important;
+            height: 42px !important;
           }
         }
       `}</style>

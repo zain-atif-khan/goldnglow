@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import { CollectionItem } from '../lib/database.types';
 
 interface SignatureCollectionsProps {
   collections?: CollectionItem[];
   onSelectCollection?: (item: CollectionItem) => void;
   onOpenCatalogue?: () => void;
+  onNavigate?: (page: string) => void;
+  whatsapp?: string;
 }
 
 interface ShowcaseSlide {
@@ -14,6 +16,8 @@ interface ShowcaseSlide {
   title: string;
   subtitle: string;
   description: string;
+  desktop_image: string;
+  mobile_image: string;
   image_url: string;
   badge: string;
   link_url?: string;
@@ -27,7 +31,9 @@ const DEFAULT_SHOWCASE_SLIDES: ShowcaseSlide[] = [
     subtitle: 'Handcrafted Uncut Polki & Emerald Heritage',
     description:
       'Hand-set uncut polki and vivid green emerald beads encased in hand-carved floral brass filigree, echoing the historic courts of Hyderabad.',
-    image_url: '/assets/collections/showcase-nizami-kada.jpg',
+    desktop_image: '/assets/collections/showcase-nizami-kada.webp',
+    mobile_image: '/assets/showcase/bangles-1-polki.webp',
+    image_url: '/assets/collections/showcase-nizami-kada.webp',
     badge: 'HERITAGE SUITE',
   },
   {
@@ -37,7 +43,9 @@ const DEFAULT_SHOWCASE_SLIDES: ShowcaseSlide[] = [
     subtitle: 'Floral Spring Enamel Hand-Painted Motifs',
     description:
       'Delicate pastel pink and mint green enamel artistry with fine polki accents, custom curated for reception and mehendi festivities.',
-    image_url: '/assets/collections/showcase-meenakari-suite.jpg',
+    desktop_image: '/assets/collections/showcase-meenakari-suite.webp',
+    mobile_image: '/assets/showcase/bangles-3-meenakari.webp',
+    image_url: '/assets/collections/showcase-meenakari-suite.webp',
     badge: 'PASTEL MEENAKARI',
   },
   {
@@ -47,7 +55,9 @@ const DEFAULT_SHOWCASE_SLIDES: ShowcaseSlide[] = [
     subtitle: 'Triple-Tier American Diamond Sparkle',
     description:
       'Micro-pavé faceted cubic zirconia stones encased in high-refraction golden alloy for effortless radiance and timeless celebration wear.',
-    image_url: '/assets/collections/showcase-kohinoor-cz.jpg',
+    desktop_image: '/assets/collections/showcase-kohinoor-cz.webp',
+    mobile_image: '/assets/showcase/bangles-2-cz.webp',
+    image_url: '/assets/collections/showcase-kohinoor-cz.webp',
     badge: 'CLASSIC SPARKLE',
   },
   {
@@ -57,7 +67,9 @@ const DEFAULT_SHOWCASE_SLIDES: ShowcaseSlide[] = [
     subtitle: 'Woven Faux Pearls with Gold-Tone Filigree',
     description:
       'An aristocratic bridal suite of lustrous woven Basra pearls and ruby cabochons designed for the quintessential royal bride.',
-    image_url: '/assets/collections/showcase-basra-pearl.jpg',
+    desktop_image: '/assets/collections/showcase-basra-pearl.webp',
+    mobile_image: '/assets/showcase/bangles-4-pearl.webp',
+    image_url: '/assets/collections/showcase-basra-pearl.webp',
     badge: 'ROYAL BASRA',
   },
 ];
@@ -66,37 +78,24 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
   collections = [],
   onSelectCollection,
   onOpenCatalogue,
+  onNavigate,
+  whatsapp = '919014761009',
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Map dynamic collections or fall back to default high-res curated showcase slides
-  const signatureItems = collections.filter(
-    (c) => c.category === 'signature' && c.active
-  );
+  // Use the 4 curated showcase slides (desktop panoramic + mobile 4:5)
+  const slides: ShowcaseSlide[] = DEFAULT_SHOWCASE_SLIDES;
 
-  const slides: ShowcaseSlide[] =
-    signatureItems.length >= 4
-      ? signatureItems.slice(0, 4).map((item, idx) => ({
-          id: item.id,
-          category: item.badge_label || DEFAULT_SHOWCASE_SLIDES[idx].category,
-          title: item.title,
-          subtitle: item.subtitle || DEFAULT_SHOWCASE_SLIDES[idx].subtitle,
-          description: item.description || DEFAULT_SHOWCASE_SLIDES[idx].description,
-          image_url:
-            DEFAULT_SHOWCASE_SLIDES[idx]?.image_url || item.image_url,
-          badge: item.badge_label || DEFAULT_SHOWCASE_SLIDES[idx].badge,
-        }))
-      : DEFAULT_SHOWCASE_SLIDES;
-
-  // Auto transition every 2.5 seconds (2500ms) seamlessly
+  // Auto transition every 2.5 seconds seamlessly when not hovered
   useEffect(() => {
+    if (isHovered) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 2500);
 
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, isHovered]);
 
   const activeSlide = slides[currentIndex];
 
@@ -105,8 +104,8 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
       id="collections-catalogue"
       style={{
         width: '100%',
-        background: 'linear-gradient(180deg, #E8D2BD 0%, #EFE0C9 50%, #EBD8BE 100%)',
-        padding: '90px 0',
+        background: 'linear-gradient(180deg, #E8D2BD 0%, #EDDCB7 50%, #E8D4B7 100%)',
+        padding: 'clamp(50px, 6vw, 76px) 0 clamp(60px, 8vw, 90px)',
       }}
     >
       <div
@@ -121,13 +120,13 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
           style={{
             textAlign: 'center',
             maxWidth: '680px',
-            margin: '0 auto 56px',
+            margin: '0 auto clamp(32px, 4.5vw, 52px)',
           }}
         >
           <h2
             style={{
               fontFamily: 'Cormorant Garamond, Georgia, serif',
-              fontSize: 'clamp(32px, 4.2vw, 48px)',
+              fontSize: 'clamp(30px, 4vw, 46px)',
               fontWeight: 600,
               color: '#120A06',
               lineHeight: 1.15,
@@ -156,6 +155,27 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={() => {
+            if (onSelectCollection) {
+              const match = collections.find((c) => c.title.toLowerCase() === activeSlide.title.toLowerCase());
+              if (match) {
+                onSelectCollection(match);
+              } else {
+                onSelectCollection({
+                  id: activeSlide.id,
+                  title: activeSlide.title,
+                  subtitle: activeSlide.subtitle,
+                  description: activeSlide.description,
+                  category: 'signature',
+                  image_url: activeSlide.image_url,
+                  display_order: 1,
+                  featured: true,
+                  active: true,
+                });
+              }
+            }
+          }}
+          className="cursor-pointer"
           style={{
             position: 'relative',
             width: '100%',
@@ -182,37 +202,30 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
                   pointerEvents: isActive ? 'auto' : 'none',
                 }}
               >
-                <img
-                  src={slide.image_url}
-                  alt={slide.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center left',
-                    transform: isActive ? 'scale(1.03)' : 'scale(1)',
-                    transition: 'transform 5000ms ease-out',
-                  }}
-                />
+                <picture className="w-full h-full block">
+                  <source media="(min-width: 1024px)" srcSet={slide.desktop_image} />
+                  <img
+                    src={slide.mobile_image}
+                    alt={slide.title}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center left',
+                      transform: isActive ? 'scale(1.03)' : 'scale(1)',
+                      transition: 'transform 5000ms ease-out',
+                    }}
+                  />
+                </picture>
 
-                {/* Natural Soft Lighting Overlay */}
+                {/* Desktop Natural Soft Right Lighting Overlay */}
                 <div
+                  className="hidden lg:block"
                   style={{
                     position: 'absolute',
                     inset: 0,
                     background:
                       'linear-gradient(to right, rgba(250, 245, 240, 0) 0%, rgba(250, 245, 240, 0) 45%, rgba(250, 245, 240, 0.3) 75%, rgba(250, 245, 240, 0.65) 100%)',
-                  }}
-                />
-
-                {/* Tablet / Mobile Soft Overlay */}
-                <div
-                  className="block lg:hidden"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background:
-                      'linear-gradient(to bottom, rgba(250, 245, 240, 0) 0%, rgba(250, 245, 240, 0.75) 55%, rgba(250, 245, 240, 0.95) 100%)',
                   }}
                 />
               </div>
@@ -221,6 +234,7 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
 
           {/* ── Right-Side Luxury Editorial Content Box ── */}
           <div
+            className="showcase-editorial-content"
             style={{
               position: 'relative',
               zIndex: 10,
@@ -231,35 +245,9 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
               minHeight: '520px',
               maxWidth: '560px',
               marginLeft: 'auto',
-              padding: 'clamp(32px, 5vw, 64px)',
+              padding: 'clamp(28px, 5vw, 64px)',
             }}
           >
-            {/* Slide Category & Number Badge */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontFamily: 'Jost, sans-serif',
-                  fontSize: '10.5px',
-                  fontWeight: 700,
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: '#8C4D15',
-                  backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                  padding: '4px 12px',
-                  borderRadius: '2px',
-                  border: '1px solid rgba(192, 132, 106, 0.25)',
-                  boxShadow: '0 2px 6px rgba(45, 30, 20, 0.04)',
-                }}
-              >
-                <span>{activeSlide.badge}</span>
-                <span style={{ opacity: 0.4 }}>|</span>
-                <span>0{currentIndex + 1}/0{slides.length}</span>
-              </span>
-            </div>
-
             {/* Headline */}
             <h2
               key={`title-${currentIndex}`}
@@ -312,57 +300,60 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
               {activeSlide.description}
             </p>
 
-            {/* Action CTA Button */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+            {/* Action CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <button
                 type="button"
-                onClick={() => {
-                  if (onSelectCollection) {
-                    const match = signatureItems.find((c) => c.title === activeSlide.title);
-                    if (match) {
-                      onSelectCollection(match);
-                    } else if (signatureItems.length > 0) {
-                      onSelectCollection(signatureItems[0]);
-                    }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onNavigate) {
+                    onNavigate('collections');
                   } else if (onOpenCatalogue) {
                     onOpenCatalogue();
+                  } else {
+                    window.location.hash = 'collections';
                   }
                 }}
-                className="btn btn-rose"
+                className="button-sliding-pill w-full sm:w-auto justify-center"
                 style={{
                   height: '44px',
-                  padding: '0 26px',
-                  borderRadius: '5px',
-                  fontSize: '11px',
-                  letterSpacing: '0.14em',
-                  gap: '8px',
+                  paddingLeft: '22px',
+                  paddingRight: '12px',
+                  backgroundColor: '#C0846A',
                 }}
               >
                 <span>EXPLORE THIS SET</span>
-                <ArrowRight size={12} />
+                <div className="button__icon-wrapper">
+                  <svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="button__icon-svg" width="10" height="10">
+                    <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.28.024z" fill="currentColor"></path>
+                  </svg>
+                  <svg viewBox="0 0 14 15" fill="none" width="10" height="10" xmlns="http://www.w3.org/2000/svg" className="button__icon-svg button__icon-svg--copy">
+                    <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.28.024z" fill="currentColor"></path>
+                  </svg>
+                </div>
               </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenCatalogue) {
-                    onOpenCatalogue();
-                  } else if (onSelectCollection && signatureItems.length > 0) {
-                    onSelectCollection(signatureItems[0]);
-                  }
-                }}
-                className="btn btn-outline"
+              <a
+                href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                  `Hello Gold N Glow! I would like to inquire about "${activeSlide.title}" (${activeSlide.subtitle}) from your signature showcase.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="btn btn-whatsapp w-full sm:w-auto justify-center"
                 style={{
                   height: '44px',
-                  padding: '0 24px',
+                  padding: '0 22px',
                   borderRadius: '5px',
                   fontSize: '11px',
-                  letterSpacing: '0.14em',
+                  letterSpacing: '0.12em',
                   gap: '8px',
+                  textDecoration: 'none',
                 }}
               >
-                <span>VIEW FULL CATALOGUE</span>
-              </button>
+                <MessageCircle size={15} />
+                <span>DISCUSS ON WHATSAPP</span>
+              </a>
             </div>
 
             {/* Dynamic Progress Indicator Dots / Lines */}
@@ -380,7 +371,10 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => setCurrentIndex(idx)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentIndex(idx);
+                    }}
                     style={{
                       height: '4px',
                       width: isSelected ? '32px' : '10px',
@@ -406,37 +400,16 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
             onClick={() => {
               if (onOpenCatalogue) {
                 onOpenCatalogue();
-              } else if (onSelectCollection && signatureItems.length > 0) {
-                onSelectCollection(signatureItems[0]);
+              } else if (onNavigate) {
+                onNavigate('collections');
+              } else if (onSelectCollection && collections.length > 0) {
+                onSelectCollection(collections[0]);
               }
             }}
+            className="button-bubble-expand"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '0 28px',
-              height: '42px',
-              borderRadius: '4px',
-              backgroundColor: '#FFFFFF',
-              color: '#C0846A',
-              fontFamily: 'Jost, sans-serif',
-              fontSize: '10.5px',
-              fontWeight: 600,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-              border: '1.5px solid #C0846A',
-              transition: 'all 0.22s ease',
-              boxShadow: '0 2px 8px rgba(45, 30, 20, 0.03)',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#C0846A';
-              (e.currentTarget as HTMLElement).style.color = '#FFFFFF';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#FFFFFF';
-              (e.currentTarget as HTMLElement).style.color = '#C0846A';
+              height: '46px',
+              padding: '0 32px',
             }}
           >
             <span>EXPLORE COMPLETE SHOWCASE ARCHIVE</span>
@@ -453,6 +426,29 @@ export const SignatureCollections: React.FC<SignatureCollectionsProps> = ({
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+        @media (max-width: 768px) {
+          .showcase-editorial-content {
+            background: rgba(255, 255, 255, 0.18) !important;
+            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+            backdrop-filter: blur(14px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+            border-radius: 18px !important;
+            border: 1px solid rgba(255, 255, 255, 0.45) !important;
+            padding: 24px 18px !important;
+            margin: 14px 10px !important;
+            min-height: auto !important;
+            box-shadow: 0 8px 32px 0 rgba(45, 30, 20, 0.18), inset 0 1px 0 0 rgba(255, 255, 255, 0.55) !important;
+            width: calc(100% - 20px) !important;
+          }
+          .showcase-editorial-content h2,
+          .showcase-editorial-content h3 {
+            text-shadow: 0 1px 8px rgba(30, 18, 10, 0.22), 0 0px 1px rgba(255, 255, 255, 0.6) !important;
+            color: #1a0e08 !important;
+          }
+          .showcase-editorial-content p {
+            text-shadow: 0 1px 4px rgba(30, 18, 10, 0.18) !important;
           }
         }
       `}</style>

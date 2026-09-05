@@ -72,6 +72,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       <SignatureStrip
         collections={collections}
         onSelectCollection={onSelectCollection}
+        onNavigate={onNavigate}
       />
 
       {/* 3. Founder's Top Picks */}
@@ -85,6 +86,8 @@ export const HomePage: React.FC<HomePageProps> = ({
             if (match) onSelectCollection(match);
           }
         }}
+        onNavigate={onNavigate}
+        whatsapp={settings.whatsapp}
       />
 
       {/* 4. Why Gold N Glow */}
@@ -114,6 +117,8 @@ export const HomePage: React.FC<HomePageProps> = ({
         collections={collections}
         onSelectCollection={onSelectCollection}
         onOpenCatalogue={onOpenCatalogue}
+        onNavigate={onNavigate}
+        whatsapp={settings.whatsapp}
       />
 
       {/* 9. Customer Testimonials (Directly above Final CTA) */}

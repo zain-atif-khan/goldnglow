@@ -19,13 +19,16 @@
     <meta property="og:description" content="Hyderabad's most trusted premium bangle boutique. Curated 22K gold, bridal heritage, and diamond masterpieces." />
     <meta property="og:image" content="/assets/hero/hero-bangles.png" />
 
-    <!-- Google Fonts Preconnect -->
+    <!-- Google Fonts — non-blocking async load -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Caveat:wght@400;600;700&family=Cinzel:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Italiana&family=Jost:wght@300;400;500;600;700&family=Marcellus&family=Montserrat:wght@300;400;500;600;700&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" /></noscript>
 
-    <!-- Instant Preload for Hero Asset to guarantee Zero Flash / Zero Gap -->
-    <link rel="preload" as="image" href="/assets/hero/hero-full-bg.png" fetchpriority="high" />
+    <!-- Preload LCP hero images -->
+    <link rel="preload" as="image" href="/assets/hero/hero-mobile-bg.webp" fetchpriority="high" media="(max-width: 767px)" />
+    <link rel="preload" as="image" href="/assets/hero/hero-full-bg.webp" fetchpriority="high" media="(min-width: 768px)" />
 
     <!-- Local Business Schema -->
     <script type="application/ld+json">

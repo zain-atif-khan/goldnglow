@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { HeroContent } from '../lib/database.types';
 import { GoldNGlowEmblemMark } from './Icons';
 
@@ -132,7 +133,7 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
           autoPlay
           muted
           playsInline
-          preload="auto"
+          preload="none"
           className="hero-media-bg"
           style={{
             width: '100%',
@@ -163,9 +164,12 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
 
       {/* ── 3. Mobile Dedicated Full-Bleed Background Image (Mobile Only: < 768px) ── */}
       <img
-        src="/assets/hero/hero-mobile-bg.png"
+        src="/assets/hero/hero-mobile-bg.webp"
         alt="Gold N Glow Royal Bangle Box"
         className="hero-mobile-image"
+        fetchPriority="high"
+        loading="eager"
+        decoding="sync"
         style={{
           position: 'absolute',
           inset: 0,
@@ -353,7 +357,8 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
           </p>
 
           {/* 5. CTA Action Buttons */}
-          <div className="hero-actions-group" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+          <div className="hero-actions-group" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            {/* Desktop: Interactive Sliding Pill Button */}
             <button
               type="button"
               onClick={() => {
@@ -363,16 +368,50 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
                   scrollToNextSection();
                 }
               }}
-              className="btn btn-gold"
+              className="button-sliding-pill hero-desktop-btn"
               style={{
                 height: '46px',
-                padding: '0 28px',
-                borderRadius: '5px',
-                fontSize: '11px',
-                letterSpacing: '0.14em',
+                paddingLeft: '24px',
+                paddingRight: '12px',
+                backgroundColor: '#9E6B15',
               }}
             >
               <span>EXPLORE COLLECTIONS</span>
+              <div className="button__icon-wrapper">
+                <svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="button__icon-svg" width="10" height="10">
+                  <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.28.024z" fill="currentColor"></path>
+                </svg>
+                <svg viewBox="0 0 14 15" fill="none" width="10" height="10" xmlns="http://www.w3.org/2000/svg" className="button__icon-svg button__icon-svg--copy">
+                  <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.28.024z" fill="currentColor"></path>
+                </svg>
+              </div>
+            </button>
+
+            {/* Mobile: Clean Unified Luxury Button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (onNavigate) {
+                  onNavigate('collections');
+                } else {
+                  scrollToNextSection();
+                }
+              }}
+              className="btn btn-gold hero-mobile-btn"
+              style={{
+                height: '46px',
+                padding: '0 22px',
+                borderRadius: '5px',
+                fontSize: '11px',
+                letterSpacing: '0.14em',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span>EXPLORE COLLECTIONS</span>
+              <ArrowRight size={13} />
             </button>
 
             <button
@@ -388,10 +427,14 @@ export const Hero: React.FC<HeroProps> = ({ content, onNavigate }) => {
               className="btn btn-outline"
               style={{
                 height: '46px',
-                padding: '0 26px',
+                padding: '0 24px',
                 borderRadius: '5px',
                 fontSize: '11px',
                 letterSpacing: '0.14em',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
               }}
             >
               <span>BRIDAL HERITAGE</span>

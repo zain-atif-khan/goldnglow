@@ -63,8 +63,42 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
               color: '#5C4A3E',
             }}
           >
-            Step inside our Tolichowki showroom. Test sizes, compare stone lusters, and find the perfect bangle stack for your special day.
+            Step inside Hyderabad's favorite bangle showroom. Test different sizes, match shades to your bridal attire, and discover your signature stack.
           </p>
+
+          {/* Mobile Only: Showroom Image directly after description */}
+          <div className="block lg:hidden w-full mt-6 mb-2">
+            <div
+              style={{
+                position: 'relative',
+                borderRadius: '18px',
+                overflow: 'hidden',
+                border: '1px solid #EDE4DC',
+                aspectRatio: '16 / 10',
+                backgroundColor: '#1E1610',
+                boxShadow: '0 12px 36px rgba(45,30,20,0.08)',
+              }}
+            >
+              <img
+                src="/assets/store/store-interior-main.webp"
+                alt="Gold N Glow Hyderabad Showroom"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  display: 'block',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(18,14,10,0.4) 0%, transparent 60%)',
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* 2-Column Content */}
@@ -271,8 +305,8 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
             </div>
           </div>
 
-          {/* Right: Showroom & Karigari Video Showcase */}
-          <div>
+          {/* Right: Showroom & Karigari Video Showcase (Desktop Only) */}
+          <div className="hidden lg:block">
             <div
               style={{
                 position: 'relative',
@@ -285,7 +319,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
               }}
             >
               <img
-                src="/assets/store/store-interior-main.jpg"
+                src="/assets/store/store-interior-main.webp"
                 alt="Gold N Glow Hyderabad Showroom Craftsmanship Video"
                 style={{
                   width: '100%',
@@ -303,36 +337,6 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
                   background: 'linear-gradient(to top, rgba(18,14,10,0.85) 0%, rgba(18,14,10,0.2) 60%, transparent 100%)',
                 }}
               />
-              {/* Floating Craftsmanship Video Badge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '16px',
-                  right: '16px',
-                  backgroundColor: 'rgba(255,255,255,0.92)',
-                  backdropFilter: 'blur(8px)',
-                  borderRadius: '4px',
-                  padding: '5px 12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  border: '1px solid rgba(192,132,106,0.3)',
-                }}
-              >
-                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#C0846A' }} />
-                <span
-                  style={{
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '9.5px',
-                    fontWeight: 700,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: '#C0846A',
-                  }}
-                >
-                  LIVE BOUTIQUE
-                </span>
-              </div>
             </div>
           </div>
         </div>
@@ -342,7 +346,7 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({
         @media (max-width: 1024px) {
           .experience-grid {
             grid-template-columns: 1fr !important;
-            gap: 40px !important;
+            gap: 32px !important;
           }
         }
       `}</style>

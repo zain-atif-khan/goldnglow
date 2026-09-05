@@ -25,11 +25,12 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
       style={{
         width: '100%',
         background: 'linear-gradient(180deg, #E8D4B7 0%, #E6CFAC 50%, #DCC19A 100%)',
-        padding: '70px 0',
+        padding: 'clamp(50px, 6vw, 70px) 0',
       }}
     >
       {/* Floating Panoramic Banner matching Signature Showcase card borders & rounded corners */}
       <div
+        className="final-cta-floating-banner"
         style={{
           maxWidth: '1440px',
           width: 'min(100% - 48px, 1440px)',
@@ -41,28 +42,37 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
           border: '1px solid #EDE4DC',
           boxShadow: '0 12px 36px -8px rgba(30, 22, 16, 0.08)',
           backgroundColor: '#FAF5F0',
-          backgroundImage: 'url(/assets/hero/hero-exact-bg.jpg)',
-          backgroundPosition: 'center right',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
           display: 'flex',
           alignItems: 'center',
           padding: '60px clamp(24px, 5vw, 64px)',
           boxSizing: 'border-box',
         }}
       >
-        {/* Soft Tablet/Mobile Gradient Overlay for High Contrast */}
+        {/* Background Responsive Photo (Desktop Only: /assets/hero/hero-exact-bg.webp) */}
+        <picture className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none">
+          <source media="(min-width: 1024px)" srcSet="/assets/hero/hero-exact-bg.webp" />
+          <img
+            src="/assets/hero/hero-exact-bg.webp"
+            alt="Gold N Glow Bangles"
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: 'center right' }}
+          />
+        </picture>
+
+        {/* Soft Desktop Gradient Overlay for Optimal Text Legibility */}
         <div
-          className="absolute inset-0 pointer-events-none lg:hidden"
+          className="hidden lg:block absolute inset-0 pointer-events-none"
           style={{
             background:
-              'linear-gradient(to right, rgba(250, 245, 240, 0.98) 0%, rgba(250, 245, 240, 0.88) 60%, rgba(250, 245, 240, 0.25) 100%)',
+              'linear-gradient(to right, rgba(250, 245, 240, 0.96) 0%, rgba(250, 245, 240, 0.88) 45%, rgba(250, 245, 240, 0.35) 75%, rgba(250, 245, 240, 0.05) 100%)',
           }}
         />
 
         {/* Banner Left Content Column */}
         <div
-          className="relative z-10 flex flex-col items-start justify-center"
+          className="final-cta-content-box relative z-10 flex flex-col items-start justify-center"
           style={{
             maxWidth: '560px',
           }}
@@ -115,7 +125,7 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
 
           {/* 3 Quick Info Items */}
           <div
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7 flex-wrap"
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-7 flex-wrap"
             style={{ marginBottom: '32px' }}
           >
             {/* Info 1: Store */}
@@ -231,9 +241,56 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({
               <MessageCircle size={14} />
             </a>
           </div>
-
         </div>
       </div>
+
+      <style>{`
+        @keyframes ctaFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @media (max-width: 768px) {
+          .final-cta-floating-banner {
+            padding: 28px 18px !important;
+            width: calc(100% - 24px) !important;
+            min-height: auto !important;
+            border-radius: 20px 4px 20px 4px !important;
+            background: #FFFFFF !important;
+            border: 1px solid #EDE4DC !important;
+            box-shadow: 0 10px 32px -6px rgba(45, 30, 20, 0.1) !important;
+          }
+          .final-cta-content-box {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-radius: 0 !important;
+            border: none !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            width: 100% !important;
+          }
+          .final-cta-content-box h2,
+          .final-cta-content-box h3,
+          .final-cta-content-box h4 {
+            text-shadow: none !important;
+            color: #120A06 !important;
+          }
+          .final-cta-content-box h3 {
+            color: #8A2E20 !important;
+          }
+          .final-cta-content-box p,
+          .final-cta-content-box h5 {
+            text-shadow: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

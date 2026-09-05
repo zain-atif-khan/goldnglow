@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { X, Ruler, Sparkles, MessageCircle, HelpCircle, Check, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { X, Sparkles, MessageCircle, HelpCircle, Check, ArrowRight } from 'lucide-react';
 
 interface WristSizeGuideModalProps {
   isOpen: boolean;
@@ -64,10 +65,31 @@ const BANGLE_SIZES: BangleSizeInfo[] = [
 export const WristSizeGuideModal: React.FC<WristSizeGuideModalProps> = ({
   isOpen,
   onClose,
-  whatsapp = '+919849012345',
+  whatsapp = '919014761009',
 }) => {
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number>(2); // Default to 2.6
   const [activeTab, setActiveTab] = useState<'visual' | 'measure'>('visual');
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.classList.add('modal-open', 'bangle-modal-active');
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.touchAction = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -78,7 +100,7 @@ export const WristSizeGuideModal: React.FC<WristSizeGuideModalProps> = ({
     `Hello Gold N Glow! I used the Wrist Sizing Guide and my size is ${currentSize.size} (${currentSize.diameterMm}mm). Can you recommend matching Lac & Glass bangles in this size?`
   )}`;
 
-  return (
+  return createPortal(
     <div
       style={{
         position: 'fixed',
@@ -430,6 +452,7 @@ export const WristSizeGuideModal: React.FC<WristSizeGuideModalProps> = ({
           </a>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

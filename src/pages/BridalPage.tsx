@@ -1,24 +1,57 @@
-import React from 'react';
-import { Palette, ArrowRight, MessageCircle, Heart, Award, Ruler } from 'lucide-react';
-import { SiteSettings } from '../lib/database.types';
+import React, { useState } from 'react';
+import { Heart, ArrowRight, Award, MessageCircle, Palette, ShoppingBag, Check } from 'lucide-react';
+import { SiteSettings, CollectionItem } from '../lib/database.types';
 import { BorderGlow } from '../components/BorderGlow';
+import { BangleDetailModal } from '../components/BangleDetailModal';
 
 interface BridalPageProps {
   settings: SiteSettings;
   onOpenCatalogue: () => void;
   onOpenSizeGuide?: () => void;
+  onAddToCart?: (item: CollectionItem, size?: string) => void;
 }
 
 export const BridalPage: React.FC<BridalPageProps> = ({
   settings,
   onOpenCatalogue,
   onOpenSizeGuide,
+  onAddToCart,
 }) => {
   const whatsappLink = `https://wa.me/${settings.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
     'Hello Gold N Glow! I would like to book a VIP Bridal Consultation.'
   )}`;
 
-  const [selectedMaterial, setSelectedMaterial] = React.useState<string>('all');
+  const [selectedMaterial, setSelectedMaterial] = useState<string>('all');
+  const [activeModalSet, setActiveModalSet] = useState<(typeof bridalSets)[0] | null>(null);
+  const [addedSetIds, setAddedSetIds] = useState<Set<string>>(new Set());
+
+  const handleAddToCartSet = (set: (typeof bridalSets)[0], e?: React.MouseEvent, size: string = '2.6') => {
+    if (e) e.stopPropagation();
+    const item: CollectionItem = {
+      id: set.id,
+      title: set.title,
+      subtitle: set.desc,
+      description: set.desc,
+      category: 'bridal',
+      material: (set.material === 'Lac' ? 'Lac' : set.material === 'Glass' ? 'Glass' : 'Lac & Glass') as any,
+      image_url: set.image,
+      badge_label: set.tag,
+      display_order: 1,
+      featured: true,
+      active: true,
+    };
+    if (onAddToCart) {
+      onAddToCart(item, size);
+    }
+    setAddedSetIds((prev) => new Set(prev).add(set.id));
+    setTimeout(() => {
+      setAddedSetIds((prev) => {
+        const next = new Set(prev);
+        next.delete(set.id);
+        return next;
+      });
+    }, 2500);
+  };
 
   const bridalSets = [
     {
@@ -35,7 +68,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
       material: 'Lac',
       tag: 'BRIDAL LAC',
       desc: 'Magnificent 8-piece bridal Lac stack combining heavy floral kadas with cascaded seed pearl latkans.',
-      image: '/assets/collections/jadau-openable.jpg',
+      image: '/assets/collections/jadau-openable.webp',
     },
     {
       id: 'bridal-3',
@@ -43,7 +76,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
       material: 'Lac & Glass',
       tag: 'BRIDAL LAC & GLASS',
       desc: 'The definitive Deccani wedding suite: centerpiece handcrafted Lac kadas flanked by 24 rich festive velvet glass bangles.',
-      image: '/assets/collections/bridal-heritage.jpg',
+      image: '/assets/collections/bridal-heritage.webp',
     },
     {
       id: 'bridal-4',
@@ -75,7 +108,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
       material: 'Glass',
       tag: 'BRIDAL GLASS',
       desc: 'Plush bridal maroon velvet glass bangles bordered with heavy antique gold-finish side kadas.',
-      image: '/assets/collections/velvet-silk-thread.jpg',
+      image: '/assets/collections/velvet-silk-thread.webp',
     },
     {
       id: 'bridal-8',
@@ -133,27 +166,6 @@ export const BridalPage: React.FC<BridalPageProps> = ({
             className="bridal-hero-grid"
           >
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginBottom: '12px',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'Jost, sans-serif',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    letterSpacing: '0.26em',
-                    textTransform: 'uppercase',
-                    color: '#8C4D15',
-                  }}
-                >
-                  HYDERABAD'S PREMIER BRIDAL BANGLES
-                </span>
-              </div>
-
               <h1
                 style={{
                   fontFamily: 'Cormorant Garamond, Georgia, serif',
@@ -247,20 +259,6 @@ export const BridalPage: React.FC<BridalPageProps> = ({
       <section style={{ width: '100%', backgroundColor: '#FFFFFF', padding: '96px 0', borderBottom: '1px solid #E2D5CA' }}>
         <div className="container">
           <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 64px' }}>
-            <span
-              style={{
-                fontFamily: 'Jost, sans-serif',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: '#C0846A',
-                display: 'block',
-                marginBottom: '8px',
-              }}
-            >
-              CURATED BRIDAL SETS
-            </span>
             <h2
               style={{
                 fontFamily: 'Cormorant Garamond, Georgia, serif',
@@ -354,8 +352,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <Ruler size={14} />
-                  <span>📐 Bridal Wrist Fit &amp; Size Guide (2.2 – 2.10)</span>
+                  <span>Bridal Wrist Fit &amp; Size Guide (2.2 – 2.10)</span>
                 </button>
               </div>
             )}
@@ -423,6 +420,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                     <div>
                       {/* Image */}
                       <div
+                        className="bridal-card-img-wrap"
                         style={{
                           width: '100%',
                           aspectRatio: '4 / 3',
@@ -430,7 +428,9 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                           backgroundColor: '#F0E4DC',
                           borderTopLeftRadius: '16px',
                           borderTopRightRadius: '16px',
+                          cursor: 'pointer',
                         }}
+                        onClick={() => setActiveModalSet(set)}
                       >
                         <img
                           src={set.image}
@@ -444,7 +444,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                           loading="lazy"
                         />
                       </div>
-                      <div style={{ padding: '24px 24px 16px' }}>
+                      <div className="bridal-card-body" style={{ padding: '24px 24px 16px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
                           <span
                             style={{
@@ -476,6 +476,7 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                           )}
                         </div>
                         <h3
+                          className="bridal-card-title"
                           style={{
                             fontFamily: 'Cormorant Garamond, Georgia, serif',
                             fontSize: '22px',
@@ -483,36 +484,71 @@ export const BridalPage: React.FC<BridalPageProps> = ({
                             color: '#1E1610',
                             lineHeight: 1.25,
                             marginBottom: '8px',
+                            cursor: 'pointer',
                           }}
+                          onClick={() => setActiveModalSet(set)}
                         >
                           {set.title}
                         </h3>
-                        <p style={{ fontFamily: 'Jost, sans-serif', fontSize: '13px', color: '#7A6356', lineHeight: 1.6 }}>
+                        <p className="bridal-card-desc" style={{ fontFamily: 'Jost, sans-serif', fontSize: '13px', color: '#7A6356', lineHeight: 1.6 }}>
                           {set.desc}
                         </p>
                       </div>
                     </div>
 
-                    <div style={{ padding: '0 24px 24px' }}>
+                    <div className="bridal-card-actions" style={{ padding: '0 20px 20px', display: 'flex', gap: '8px' }}>
+                      <button
+                        onClick={(e) => handleAddToCartSet(set, e)}
+                        className={addedSetIds.has(set.id) ? "btn btn-whatsapp" : "btn btn-rose"}
+                        style={{
+                          flex: 1,
+                          height: '40px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          letterSpacing: '0.12em',
+                          fontWeight: 700,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                        }}
+                      >
+                        {addedSetIds.has(set.id) ? (
+                          <>
+                            <Check size={14} />
+                            <span>ADDED ✓</span>
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingBag size={14} />
+                            <span>SHORTLIST</span>
+                          </>
+                        )}
+                      </button>
+
                       <a
                         href={`https://wa.me/${settings.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                          `Hello Gold N Glow! I am interested in the ${set.title}.`
+                          `Hello Gold N Glow! I am interested in inquiring about "${set.title}" (${set.tag}).`
                         )}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="btn btn-whatsapp w-full justify-center"
                         style={{
-                          height: '42px',
-                          borderRadius: '5px',
-                          fontSize: '11px',
-                          letterSpacing: '0.12em',
-                          textDecoration: 'none',
-                          gap: '8px',
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '6px',
+                          backgroundColor: '#FFFFFF',
+                          border: '1.5px solid #E2D5CA',
+                          color: '#25D366',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.2s ease',
+                          flexShrink: 0,
                         }}
+                        title="Inquire on WhatsApp"
                       >
-                        <MessageCircle size={14} />
-                        <span>INQUIRE BRIDAL PRICE</span>
+                        <MessageCircle size={16} />
                       </a>
                     </div>
                   </div>
@@ -666,11 +702,95 @@ export const BridalPage: React.FC<BridalPageProps> = ({
         }
 
         @media (max-width: 1024px) {
-          .bridal-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          .bridal-sets-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .bridal-pillars-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+          .bridal-hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .bridal-sets-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+          }
+          .bridal-pillars-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+        }
+        @media (max-width: 768px) {
+          .container {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+          }
+          .bridal-sets-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+          }
+          .bridal-card-img-wrap {
+            aspect-ratio: 1 / 1 !important;
+          }
+          .bridal-card-body {
+            padding: 12px 10px 8px !important;
+          }
+          .bridal-card-title {
+            font-size: 14.5px !important;
+            line-height: 1.25 !important;
+            font-weight: 600 !important;
+            margin-bottom: 4px !important;
+            word-break: break-word !important;
+            overflow: hidden !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+          }
+          .bridal-card-desc {
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+            font-size: 11px !important;
+            line-height: 1.4 !important;
+            margin-bottom: 6px !important;
+            color: #7A6356 !important;
+          }
+          .bridal-card-actions {
+            padding: 0 10px 12px !important;
+          }
+          .bridal-card-actions a {
+            height: 36px !important;
+            font-size: 9.5px !important;
+            padding: 0 6px !important;
+            letter-spacing: 0.04em !important;
+            gap: 6px !important;
+          }
+          .bridal-pillars-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+          }
+          .bridal-pillars-grid > div {
+            padding: 16px 10px !important;
+          }
         }
       `}</style>
+
+      {/* Product Detail Modal */}
+      <BangleDetailModal
+        isOpen={!!activeModalSet}
+        onClose={() => setActiveModalSet(null)}
+        item={
+          activeModalSet
+            ? {
+                id: activeModalSet.id,
+                title: activeModalSet.title,
+                description: activeModalSet.desc,
+                image: activeModalSet.image,
+                tag: activeModalSet.tag,
+                material: activeModalSet.material,
+              }
+            : null
+        }
+        onAddToCart={(modalItem, size) => {
+          if (activeModalSet) {
+            handleAddToCartSet(activeModalSet, undefined, size);
+            setActiveModalSet(null);
+          }
+        }}
+        onOpenSizeGuide={onOpenSizeGuide}
+        whatsapp={settings.whatsapp}
+        isAdded={activeModalSet ? addedSetIds.has(activeModalSet.id) : false}
+      />
     </div>
   );
 };

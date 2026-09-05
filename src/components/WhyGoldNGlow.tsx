@@ -402,7 +402,21 @@ export const WhyGoldNGlow: React.FC<WhyGoldNGlowProps> = ({ items }) => {
         }
         @media (max-width: 640px) {
           .pillars-grid {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+          }
+          .pillars-grid > div {
+            padding: 12px 10px !important;
+            border-radius: 16px 2px 16px 2px !important;
+          }
+          .pillars-grid h4 {
+            font-size: 10px !important;
+            letter-spacing: 0.08em !important;
+            line-height: 1.3 !important;
+          }
+          .pillars-grid p {
+            font-size: 11px !important;
+            line-height: 1.4 !important;
           }
         }
       `}</style>

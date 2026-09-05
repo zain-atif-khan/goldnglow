@@ -209,8 +209,8 @@ export const Footer: React.FC<FooterProps> = ({
               Our 2002 Heritage
             </a>
             <a
-              href="#experience"
-              onClick={(e) => handleNav('experience', e)}
+              href="#about"
+              onClick={(e) => handleNav('about', e)}
               style={{ fontFamily: 'Jost, sans-serif', fontSize: '13.5px', color: '#F5E9E1', textDecoration: 'none', transition: 'color 0.2s ease' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#C88A70'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#F5E9E1'; }}

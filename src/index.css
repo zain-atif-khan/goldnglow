@@ -3,7 +3,6 @@
    Theme Studio Supported (Current Rose-Gold vs Royal Green)
    ═══════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* ─── Theme Tokens: Current Theme (Rose Gold & Champagne) ───── */
@@ -500,15 +499,264 @@ button {
   font-size: 12px !important;
 }
 
-/* ─── Editorial Fashion Micro-Labels (No Pill/Container) ───── */
+/* ─── 7. Uiverse.io by Creatlydev: Animated Sliding-Icon Pill Button ─── */
+.button-sliding-pill {
+  --clr: #C0846A;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-flex;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--clr);
+  color: #fff;
+  border-radius: 10rem;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.4rem;
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 4px 14px -2px rgba(192, 132, 106, 0.35);
+  position: relative;
+  transition: background-color 0.25s ease;
+}
+
+.button-sliding-pill .button__icon-wrapper {
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  color: var(--clr);
+  background-color: #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.button-sliding-pill .button__icon-svg {
+  position: relative;
+}
+
+/* Sliding icon animation — DESKTOP ONLY */
+@media (min-width: 769px) and (hover: hover) {
+  .button-sliding-pill {
+    transition: background-color 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+  .button-sliding-pill:hover {
+    background-color: #1E1610;
+    box-shadow: 0 8px 24px -2px rgba(30, 22, 16, 0.4);
+    transform: translateY(-1px);
+  }
+  .button-sliding-pill:hover .button__icon-wrapper {
+    color: #1E1610;
+  }
+  .button-sliding-pill .button__icon-svg {
+    transition: transform 0.3s ease-in-out;
+  }
+  .button-sliding-pill .button__icon-svg--copy {
+    position: absolute;
+    transform: translate(-150%, 150%);
+  }
+  .button-sliding-pill:hover .button__icon-svg:first-child {
+    transform: translate(150%, -150%);
+  }
+  .button-sliding-pill:hover .button__icon-svg--copy {
+    transition: transform 0.3s ease-in-out 0.08s;
+    transform: translate(0, 0);
+  }
+}
+
+/* Mobile: clean static pill button with no icon jumping or sliding */
+@media (max-width: 768px) {
+  .button-sliding-pill .button__icon-svg--copy {
+    display: none !important;
+  }
+}
+
+/* ─── Hero Action Buttons: Responsive Switch (Sliding Pill for Desktop, Solid Gold for Mobile) ─── */
+@media (max-width: 768px) {
+  .hero-desktop-btn {
+    display: none !important;
+  }
+  .hero-mobile-btn {
+    display: inline-flex !important;
+  }
+}
+@media (min-width: 769px) {
+  .hero-desktop-btn {
+    display: inline-flex !important;
+  }
+  .hero-mobile-btn {
+    display: none !important;
+  }
+}
+
+/* ─── 8. Uiverse.io by Randdose: Dual-Bubble Inward Expanding Button ─── */
+.button-bubble-expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0 32px;
+  height: 46px;
+  border: 1.5px solid #C0846A;
+  border-radius: 4px;
+  color: #8A2E20;
+  background-color: #FFFFFF;
+  font-family: var(--font-body, 'Jost', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(45, 30, 20, 0.04);
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
+}
+
+.button-bubble-expand span,
+.button-bubble-expand p {
+  position: relative;
+  z-index: 2;
+  color: #8A2E20;
+}
+
+/* Dual-Bubble Expansion Animation — DESKTOP ONLY */
+@media (min-width: 769px) and (hover: hover) {
+  .button-bubble-expand {
+    transition: border-color 300ms ease, color 250ms ease, background-color 300ms ease, box-shadow 300ms ease, transform 200ms ease;
+  }
+  .button-bubble-expand span,
+  .button-bubble-expand p {
+    transition: color 250ms ease, text-shadow 250ms ease;
+  }
+  .button-bubble-expand:hover {
+    color: #FFFFFF !important;
+    background-color: #C0846A;
+    border-color: #8A2E20;
+    box-shadow: 0 8px 24px rgba(192, 132, 106, 0.35);
+    transform: translateY(-1px);
+  }
+  .button-bubble-expand:hover span,
+  .button-bubble-expand:hover p {
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 2px rgba(45, 20, 15, 0.25);
+  }
+  .button-bubble-expand:active {
+    border-color: #6E2217;
+    background-color: #8A2E20;
+  }
+  .button-bubble-expand::before,
+  .button-bubble-expand::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 140%;
+    height: 500%;
+    background: #C0846A;
+    opacity: 100%;
+    border-radius: 50%;
+    transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), background-color 300ms ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .button-bubble-expand::before {
+    left: 0;
+    transform: translate(-105%, -50%);
+  }
+  .button-bubble-expand::after {
+    right: 0;
+    transform: translate(105%, -50%);
+  }
+  .button-bubble-expand:hover::before {
+    transform: translate(-5%, -50%);
+  }
+  .button-bubble-expand:hover::after {
+    transform: translate(5%, -50%);
+  }
+  .button-bubble-expand:active::before,
+  .button-bubble-expand:active::after {
+    background: #8A2E20;
+  }
+}
+
+/* Mobile: Clean static outline button without bubble pseudo-elements */
+@media (max-width: 768px) {
+  .button-bubble-expand::before,
+  .button-bubble-expand::after {
+    display: none !important;
+  }
+  .button-bubble-expand:active {
+    background-color: #F7EEE8;
+  }
+}
+
+/* ─── 9. Cinematic Footer Reveal Depth & Atmospheric Blur ─── */
+.curtain-footer-layer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+.curtain-footer-cinematic {
+  transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: filter;
+}
+
+/* Mobile Footer: Normal Static Document Flow */
+@media (max-width: 768px) {
+  .curtain-content-layer {
+    position: relative !important;
+    z-index: 1 !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+  }
+  .curtain-footer-layer {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    filter: none !important;
+    z-index: 1 !important;
+  }
+  .footer-cinematic-light {
+    display: none !important;
+  }
+}
+
+.footer-cinematic-light {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 650px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(192, 132, 106, 0.22) 0%, rgba(229, 196, 131, 0.08) 45%, transparent 75%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Editorial Material Tag (Distinct Font & Distinct Color) ───── */
 .type-editorial-tag {
   display: inline-block;
-  font-family: var(--font-body);
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #8A2E20;
+  font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: #8C4D15;
   background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
@@ -523,11 +771,11 @@ button {
 }
 
 .type-editorial-tag-rose {
-  color: #C0846A !important;
+  color: #A0522D !important;
 }
 
 .type-editorial-tag-muted {
-  color: #7A6356 !important;
+  color: #8C4D15 !important;
 }
 
 /* ─── Cinematic Layered Footer Reveal Depth Transition ─────── */
@@ -934,3 +1182,32 @@ aside + main textarea {
     color: #120A06 !important;
   }
 }
+
+/* ─── Modal Active State: Hide Navbar Completely on Phone and Desktop ─── */
+body.modal-open .header-unified-wrapper,
+body.modal-open .header-main-nav,
+body.modal-open header,
+body.modal-open nav,
+body.modal-open .mobile-bottom-nav,
+body.modal-open .floating-whatsapp-btn,
+body.bangle-modal-active .header-unified-wrapper,
+body.bangle-modal-active .header-main-nav,
+body.bangle-modal-active header,
+body.bangle-modal-active nav,
+body.bangle-modal-active .mobile-bottom-nav,
+body.bangle-modal-active .floating-whatsapp-btn {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(-100%) !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease !important;
+}
+
+html.modal-open,
+body.modal-open,
+html.bangle-modal-active,
+body.bangle-modal-active {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+

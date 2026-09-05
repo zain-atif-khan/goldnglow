@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Award, Gem, Users, Heart } from 'lucide-react';
 import { FounderContent } from '../lib/database.types';
 
@@ -13,20 +14,46 @@ export const AboutModal: React.FC<AboutModalProps> = ({
   onClose,
   founder,
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.classList.add('modal-open', 'bangle-modal-active');
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.classList.remove('modal-open', 'bangle-modal-active');
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.touchAction = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 100,
-        backgroundColor: 'rgba(30,22,16,0.6)',
-        backdropFilter: 'blur(6px)',
+        zIndex: 999999,
+        backgroundColor: 'rgba(30,22,16,0.7)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
+        overscrollBehavior: 'contain',
       }}
     >
       <div
@@ -34,8 +61,9 @@ export const AboutModal: React.FC<AboutModalProps> = ({
           position: 'relative',
           width: '100%',
           maxWidth: '720px',
-          maxHeight: '90vh',
+          maxHeight: '90dvh',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
           backgroundColor: '#FFFFFF',
           borderRadius: '20px',
           border: '1px solid #E2D5CA',
@@ -227,6 +255,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
           }
         }
       `}</style>
-    </div>
+    </div>,
+    document.body
   );
 };
